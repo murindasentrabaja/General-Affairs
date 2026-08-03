@@ -105,6 +105,7 @@
             backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border-right: 1px solid var(--glass-border-light);
             box-shadow: 15px 0 40px var(--glass-shadow), inset -2px 0 10px rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
         }
         
         .brand-logo { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 2.5rem; padding: 0.5rem; cursor: pointer; position: relative; }
@@ -144,7 +145,7 @@
         .sidebar-footer { border-top: 1px solid rgba(255, 255, 255, 0.4); padding-top: 1.5rem; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
 
         /* Main Content */
-        .main-content { margin-left: 290px; flex: 1; padding: 3rem 3.5rem; display: flex; flex-direction: column; width: calc(100% - 290px); }
+        .main-content { margin-left: 290px; flex: 1; padding: 3rem 3.5rem; display: flex; flex-direction: column; width: calc(100% - 290px); transition: all 0.3s ease; }
         
         header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; animation: fadeUpGlass 0.8s ease forwards; }
         .header-info h1 { 
@@ -193,7 +194,7 @@
         .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3.5rem; }
         .stat-card { 
             padding: 2rem; border-radius: 28px; opacity: 0;
-            display: flex; flex-direction: column; justify-content: center;
+            display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;
         }
         .stat-card:nth-child(1) { animation: fadeUpGlass 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.1s; }
         .stat-card:nth-child(2) { animation: fadeUpGlass 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s; }
@@ -463,12 +464,72 @@
         .spinner-ring { width: 60px; height: 60px; border: 5px solid rgba(255,255,255,0.5); border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; box-shadow: 0 0 20px rgba(2, 132, 199, 0.2); }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* ============================================================
+           RESPONSIVE DESIGN (PC, TABLET, MOBILE)
+        ============================================================= */
+        @media (max-width: 1200px) {
+            .summary-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            body { flex-direction: column; }
+            
+            .sidebar { 
+                width: 100%; height: auto; position: relative; padding: 1.5rem; 
+                border-right: none; border-bottom: 1px solid var(--glass-border-light);
+                box-shadow: 0 10px 20px var(--glass-shadow);
+            }
+            .brand-logo { margin-bottom: 1rem; align-items: center; text-align: center; }
+            .brand-logo .sidebar-logo { height: 50px; }
+            
+            /* Ubah menu menjadi horizontal scroll di mobile */
+            .nav-list { 
+                display: flex; flex-direction: row; overflow-x: auto; gap: 10px; 
+                margin-bottom: 0; padding-bottom: 10px;
+            }
+            /* Sembunyikan scrollbar untuk tampilan mobile nav yang lebih bersih */
+            .nav-list::-webkit-scrollbar { height: 6px; display: none; }
+            .nav-item { margin-bottom: 0; flex-shrink: 0; padding: 0.7rem 1.2rem; }
+            .sidebar-footer { display: none; } /* Sembunyikan footer sidebar di layar sempit */
+
+            .main-content { 
+                margin-left: 0; width: 100%; padding: 2rem 1.5rem; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+            .header-actions { width: 100%; align-items: flex-start; }
+            .action-buttons { flex-wrap: wrap; width: 100%; }
+            .btn-action, .btn-masuk-sistem { flex: 1 1 calc(50% - 12px); justify-content: center; }
+            
+            .controls-panel { flex-direction: column; align-items: stretch; padding: 1.5rem; }
+            .search-box { max-width: 100%; }
+            .filter-row { justify-content: center; width: 100%; }
+            .btn-filter { flex: 1 1 auto; text-align: center; }
+            
+            .summary-grid { gap: 1.5rem; margin-bottom: 2.5rem; }
+            .stat-card { padding: 1.5rem; }
+        }
+
         @media (max-width: 640px) {
             .login-card { padding: 2.5rem 1.8rem; border-radius: 24px; }
             .appsheet-topbar { padding: 0 1rem; height: 60px; }
             .appsheet-brand-text { font-size: 0.8rem; }
             .btn-topbar span.label-text { display: none; }
             .btn-topbar { padding: 0.6rem 0.9rem; }
+        }
+
+        @media (max-width: 480px) {
+            .summary-grid { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+            .btn-action, .btn-masuk-sistem { width: 100%; flex: 1 1 auto; }
+            .filter-row { flex-direction: column; }
+            .btn-filter { width: 100%; }
+            .main-content { padding: 1.5rem 1rem; }
+            .header-info h1 { font-size: 1.8rem; }
+            
+            .appsheet-actions { flex-wrap: wrap; justify-content: flex-end; }
         }
 
         /* Print Header */
