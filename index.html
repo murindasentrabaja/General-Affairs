@@ -1,1127 +1,2019 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General Affairs System | PT Murinda Sentra Baja</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
-        /* ============================================================
-           LIQUID GLASS 3D THEME VARIABLES
-        ============================================================= */
-        :root {
-            --primary-blue: #0284c7; 
-            --accent-blue: #0ea5e9;
-            --primary-green: #059669; 
-            --primary-orange: #ea580c;
-            --danger-red: #e11d48; 
-            
-            /* Glass Values */
-            --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 100%);
-            --glass-strong: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
-            --glass-solid: rgba(255, 255, 255, 0.85);
-            
-            /* 3D Glass Highlights & Shadows */
-            --glass-border-light: rgba(255, 255, 255, 0.9);
-            --glass-border-dark: rgba(255, 255, 255, 0.3);
-            --glass-shadow: rgba(0, 30, 80, 0.08);
-            --glass-inset-shadow: inset 2px 2px 6px rgba(255, 255, 255, 0.8), inset -3px -3px 8px rgba(0, 0, 0, 0.03);
-            
-            --text-dark: #0f172a; 
-            --text-muted: #334155; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GA-ERP · PT Murinda Sentra Baja</title>
+<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#F2F5FB;
+  --surface:#FFFFFF;
+  --surface-soft:#F8FAFE;
+  --ink:#121A2D;
+  --ink-soft:#5B6B84;
+  --ink-faint:#96A3B8;
+  --border:#E4E9F3;
+  --brand-1:#3457F7;
+  --brand-2:#6D5DF6;
+  --success:#0E9F6E;
+  --success-bg:#E7F9F1;
+  --warn:#D97706;
+  --warn-bg:#FEF3E2;
+  --danger:#E11D48;
+  --danger-bg:#FDEAEF;
+  --neutral-bg:#EEF1F7;
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:10px;
+  --shadow-card:0 1px 2px rgba(18,26,45,.04), 0 8px 24px -12px rgba(18,26,45,.10);
+  --sidebar-w:278px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14.5px;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.font-display{font-family:'Sora',sans-serif;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:#CBD5E8;border-radius:20px;}
+::-webkit-scrollbar-track{background:transparent;}
+a{color:inherit;}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        /* Custom Scrollbar Liquid */
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
-        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, rgba(2, 132, 199, 0.4), rgba(14, 165, 233, 0.4)); 
-            border-radius: 20px; border: 2px solid rgba(255,255,255,0.5); 
-        }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(2, 132, 199, 0.7); }
+/* ============ LAYOUT ============ */
+#app{display:flex;min-height:100vh;}
 
-        /* Animasi Background Liquid (Gelombang Air Bercahaya) */
-        body { 
-            min-height: 100vh; display: flex; color: var(--text-dark); overflow-x: hidden; 
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.3) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.3) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.2) 0%, transparent 50%),
-                #e0f2fe;
-            background-size: 200% 200%;
-            animation: liquidWave 20s ease-in-out infinite alternate;
-        }
-        @keyframes liquidWave { 
-            0% { background-position: 0% 0%; } 
-            50% { background-position: 100% 100%; } 
-            100% { background-position: 0% 50%; } 
-        }
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+  width:var(--sidebar-w);
+  flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;
+  z-index:40;
+  transition:transform .25s ease;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  padding:20px 20px 18px 20px;
+  border-bottom:1px solid var(--border);
+}
+.brand-logo{height:32px;width:auto;object-fit:contain;flex-shrink:0;display:block;}
+.brand-divider{width:1px;height:28px;background:var(--border);flex-shrink:0;}
+.brand-text .t1{font-family:'Sora',sans-serif;font-weight:700;font-size:15.5px;line-height:1.15;letter-spacing:-.2px;}
+.brand-text .t2{font-size:11.5px;color:var(--ink-faint);margin-top:1px;}
 
-        /* Base Animasi Masuk */
-        @keyframes fadeUpGlass {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(5px); }
-            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-        }
+/* ---------- IKON DASHBOARD (favicon) ---------- */
+.nav-dash-icon{width:19px;height:19px;object-fit:contain;flex-shrink:0;}
 
-        /* ============================================================
-           GLASS CORE CLASSES (SHINE & 3D CLICK)
-        ============================================================= */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border-dark);
-            border-top: 1px solid var(--glass-border-light);
-            border-left: 1px solid var(--glass-border-light);
-            box-shadow: 10px 15px 35px var(--glass-shadow), var(--glass-inset-shadow);
-        }
+.nav-scroll{flex:1;overflow-y:auto;padding:14px 12px 10px 12px;}
+.nav-dash{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 12px;border-radius:var(--radius-sm);
+  cursor:pointer;font-weight:600;font-size:13.6px;color:var(--ink);
+  margin-bottom:10px;
+}
+.nav-dash.active,.nav-dash:hover{background:var(--neutral-bg);}
+.nav-dash i{width:20px;text-align:center;color:var(--brand-1);}
 
-        /* Shine Effect Generator */
-        .glass-interactive { position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 1; }
-        .glass-interactive::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-            transform: skewX(-25deg); transition: 0.6s ease; z-index: -1; pointer-events: none;
-        }
-        .glass-interactive:hover::after { left: 150%; transition: 0.7s ease-in-out; }
-        
-        /* 3D Click / Press Effect */
-        .glass-interactive:active {
-            transform: scale(0.96) translateY(3px) !important;
-            box-shadow: 2px 5px 10px rgba(0,0,0,0.05), inset 4px 4px 12px rgba(0,0,0,0.1), inset -4px -4px 12px rgba(255,255,255,0.8) !important;
-            border-color: transparent !important;
-        }
+.nav-group{margin-bottom:4px;}
+.nav-group-head{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:var(--radius-sm);
+  cursor:pointer;user-select:none;
+}
+.nav-group-head:hover{background:var(--surface-soft);}
+.mini-badge{
+  width:26px;height:26px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:11.5px;
+  background:linear-gradient(150deg,var(--c1),var(--c2));
+  box-shadow:0 4px 8px -2px color-mix(in srgb, var(--c1) 65%, transparent), inset 0 1px 1px rgba(255,255,255,.45), inset 0 -2px 3px rgba(0,0,0,.18);
+}
+.nav-group-title{flex:1;font-size:12.6px;font-weight:700;color:var(--ink-soft);letter-spacing:.1px;}
+.nav-group-head i.chev{font-size:10px;color:var(--ink-faint);transition:transform .2s;}
+.nav-group.open .chev{transform:rotate(90deg);}
+.nav-items{max-height:0;overflow:hidden;transition:max-height .22s ease;padding-left:12px;}
+.nav-group.open .nav-items{max-height:600px;}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 10px 8px 14px;margin:2px 0;border-radius:9px;
+  font-size:13.2px;color:var(--ink-soft);cursor:pointer;
+  border-left:2px solid transparent;
+}
+.nav-item i{width:15px;font-size:12.5px;text-align:center;color:var(--c1);}
+.nav-item:hover{background:var(--surface-soft);color:var(--ink);}
+.nav-item.active{background:var(--surface-soft);color:var(--c1);font-weight:700;border-left:2px solid var(--c1);}
 
-        /* Sidebar 3D Liquid */
-        .sidebar { 
-            width: 290px; height: 100vh; position: fixed; padding: 2rem 1.5rem; z-index: 100;
-            display: flex; flex-direction: column; 
-            background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 100%);
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border-right: 1px solid var(--glass-border-light);
-            box-shadow: 15px 0 40px var(--glass-shadow), inset -2px 0 10px rgba(255,255,255,0.5);
-            transition: all 0.3s ease;
-        }
-        
-        .brand-logo { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 2.5rem; padding: 0.5rem; cursor: pointer; position: relative; }
-        .sidebar-logo { height: 42px; width: auto; object-fit: contain; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.1)); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .brand-logo:hover .sidebar-logo { transform: scale(1.08) rotate(-2deg); filter: drop-shadow(0 15px 15px rgba(2, 132, 199, 0.3)); }
-        .brand-text h2 { font-size: 1.1rem; font-weight: 800; color: var(--primary-blue); line-height: 1.2; text-shadow: 0 2px 5px rgba(255,255,255,0.8); }
-        .location-text { font-size: 0.65rem; color: #fff; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); padding: 4px 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3); margin-top: 6px; }
-        
-        .nav-list { list-style: none; overflow-y: auto; flex: 1; margin-bottom: 1.5rem; padding-right: 5px;}
-        
-        /* Liquid Glass Nav Items */
-        .nav-item { 
-            display: flex; align-items: center; gap: 14px; padding: 0.9rem 1.2rem; margin-bottom: 10px; 
-            border-radius: 16px; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); 
-            background: rgba(255,255,255,0.2); border: 1px solid transparent;
-        }
-        .nav-item i { font-size: 1.15rem; transition: transform 0.4s; color: var(--primary-blue); }
-        
-        .nav-item:hover { 
-            background: var(--glass-strong);
-            border-top: 1px solid rgba(255,255,255,0.9);
-            border-left: 1px solid rgba(255,255,255,0.9);
-            box-shadow: 5px 8px 20px rgba(0,0,0,0.05), inset 2px 2px 5px rgba(255,255,255,0.8);
-            transform: translateX(6px); color: var(--primary-blue);
-        }
-        .nav-item:hover i { transform: scale(1.2) rotate(5deg); text-shadow: 0 0 10px rgba(14, 165, 233, 0.5); }
-        
-        .nav-item.active { 
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); 
-            color: white; transform: translateX(4px); 
-            border-top: 1px solid rgba(255,255,255,0.5);
-            border-left: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.4), inset 2px 2px 10px rgba(255,255,255,0.3);
-        }
-        .nav-item.active i { color: white; }
-        
-        .sidebar-footer { border-top: 1px solid rgba(255, 255, 255, 0.4); padding-top: 1.5rem; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
+.sidebar-foot{border-top:1px solid var(--border);padding:14px 16px;}
+.identity-card{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-sm);}
+.identity-card:hover{background:var(--surface-soft);}
+.identity-avatar{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(150deg,#334155,#64748B);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;
+}
+.identity-name{font-size:12.8px;font-weight:700;line-height:1.2;}
+.identity-sub{font-size:11px;color:var(--ink-faint);}
 
-        /* Main Content */
-        .main-content { margin-left: 290px; flex: 1; padding: 3rem 3.5rem; display: flex; flex-direction: column; width: calc(100% - 290px); transition: all 0.3s ease; }
-        
-        header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; animation: fadeUpGlass 0.8s ease forwards; }
-        .header-info h1 { 
-            font-size: 2.4rem; font-weight: 800; letter-spacing: -0.5px; 
-            color: var(--text-dark); text-shadow: 2px 4px 8px rgba(255,255,255,0.9), 0 0 20px rgba(2, 132, 199, 0.1);
-        }
-        .header-info p { font-size: 1rem; color: var(--text-muted); margin-top: 8px; font-weight: 600; background: rgba(255,255,255,0.5); display: inline-block; padding: 4px 12px; border-radius: 8px; backdrop-filter: blur(5px); }
-        
-        .header-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
-        .sync-status { 
-            background: var(--glass-strong); backdrop-filter: blur(15px); padding: 0.7rem 1.8rem; 
-            border-radius: 50px; border-top: 1px solid rgba(255,255,255,0.9); border-left: 1px solid rgba(255,255,255,0.9);
-            box-shadow: 5px 8px 20px var(--glass-shadow), inset 2px 2px 5px rgba(255,255,255,0.6);
-            display: inline-flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 800; color: var(--primary-blue);
-        }
-        .sync-status i { animation: spinSlow 3s linear infinite; text-shadow: 0 0 8px rgba(2, 132, 199, 0.4); }
-        @keyframes spinSlow { 100% { transform: rotate(360deg); } }
-        
-        /* Action Buttons */
-        .action-buttons { display: flex; gap: 12px; }
-        .btn-action { 
-            background: var(--glass-solid); border: none; padding: 0.7rem 1.4rem; border-radius: 14px;
-            font-size: 0.85rem; font-weight: 800; color: var(--text-muted); cursor: pointer;
-            display: flex; align-items: center; gap: 8px; 
-            border-top: 2px solid rgba(255,255,255,1); border-left: 2px solid rgba(255,255,255,1);
-            box-shadow: 5px 8px 20px rgba(0,0,0,0.06), inset -2px -2px 6px rgba(0,0,0,0.02);
-        }
-        .btn-action:hover { color: var(--primary-blue); transform: translateY(-4px); box-shadow: 8px 12px 25px rgba(2, 132, 199, 0.15), inset -2px -2px 6px rgba(0,0,0,0.02); }
-        
-        .btn-action.excel { color: var(--primary-green); }
-        .btn-action.print { color: var(--primary-orange); }
+/* ---------- MAIN ---------- */
+.main{margin-left:var(--sidebar-w);flex:1;min-width:0;display:flex;flex-direction:column;}
+.topbar{
+  position:sticky;top:0;z-index:30;
+  background:rgba(242,245,251,.86);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;
+  padding:16px 28px;
+}
+#menuToggle{display:none;background:none;border:none;font-size:18px;color:var(--brand-1);cursor:pointer;}
+.crumb{flex:0 0 auto;}
+.crumb .c-eyebrow{font-size:11.5px;color:var(--ink-faint);font-weight:700;}
+.crumb h2{margin:1px 0 0 0;font-size:19px;font-weight:700;letter-spacing:-.2px;}
+.searchbox{
+  flex:1;max-width:360px;display:flex;align-items:center;gap:9px;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:9px 14px;color:var(--ink-soft);
+}
+.searchbox input{border:none;outline:none;background:none;font-size:13.3px;flex:1;color:var(--ink);font-family:inherit;}
+.searchbox i{font-size:13px;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  border:none;border-radius:11px;padding:10px 17px;
+  font-weight:700;font-size:13.3px;cursor:pointer;font-family:inherit;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(150deg,var(--brand-1),var(--brand-2));color:#fff;box-shadow:0 8px 16px -6px rgba(52,87,247,.5);}
+.btn-primary:hover{box-shadow:0 10px 20px -6px rgba(52,87,247,.6);}
+.btn-ghost{background:var(--surface);color:var(--ink);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--surface-soft);}
+.btn-danger-soft{background:var(--danger-bg);color:var(--danger);}
+.btn-sm{padding:7px 12px;font-size:12.5px;border-radius:9px;}
+.icon-btn{width:37px;height:37px;border-radius:10px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--brand-1);flex-shrink:0;}
+.icon-btn:hover{background:var(--surface-soft);color:var(--brand-2);}
 
-        /* Tombol Masuk Sistem - 3D Liquid Gem */
-        .btn-masuk-sistem {
-            background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-            color: #fff; border: none; padding: 0.7rem 1.6rem; border-radius: 14px;
-            font-size: 0.85rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px;
-            border-top: 1px solid rgba(255,255,255,0.6); border-left: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.4), inset 2px 2px 10px rgba(255,255,255,0.4), inset -3px -3px 10px rgba(0,0,0,0.2);
-        }
-        .btn-masuk-sistem:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(2, 132, 199, 0.5), inset 2px 2px 15px rgba(255,255,255,0.6); }
-        .btn-masuk-sistem i { transition: transform 0.3s ease; }
-        .btn-masuk-sistem:hover i { transform: translateX(4px) scale(1.1); }
+.content{padding:24px 28px 60px 28px;flex:1;}
 
-        /* Summary Cards - 3D Glass Blocks */
-        .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3.5rem; }
-        .stat-card { 
-            padding: 2rem; border-radius: 28px; opacity: 0;
-            display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;
-        }
-        .stat-card:nth-child(1) { animation: fadeUpGlass 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.1s; }
-        .stat-card:nth-child(2) { animation: fadeUpGlass 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s; }
-        .stat-card:nth-child(3) { animation: fadeUpGlass 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.3s; }
-        .stat-card:nth-child(4) { animation: fadeUpGlass 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.4s; }
+/* ---------- DASHBOARD ---------- */
+.hello h1{font-size:24px;margin:0 0 4px 0;letter-spacing:-.4px;}
+.hello p{margin:0;color:var(--ink-soft);font-size:13.6px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:16px;margin-top:22px;}
+.kpi-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:18px;box-shadow:var(--shadow-card);
+  display:flex;flex-direction:column;gap:14px;cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.kpi-card:hover{transform:translateY(-3px);box-shadow:0 14px 28px -14px rgba(18,26,45,.22);}
+.kpi-icon{
+  width:46px;height:46px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;
+  background:linear-gradient(150deg,var(--c1),var(--c2));
+  box-shadow:0 8px 16px -5px color-mix(in srgb, var(--c1) 60%, transparent), inset 0 1px 1px rgba(255,255,255,.45), inset 0 -3px 5px rgba(0,0,0,.18);
+  position:relative;
+}
+.kpi-num{font-family:'Sora',sans-serif;font-size:27px;font-weight:800;letter-spacing:-.5px;line-height:1;}
+.kpi-label{font-size:12.4px;color:var(--ink-soft);font-weight:600;margin-top:3px;}
 
-        .stat-card:hover { transform: translateY(-8px) scale(1.03); border-color: rgba(255,255,255,1); background: rgba(255,255,255,0.7); }
-        
-        /* 3D Colored Water Levels inside Cards */
-        .stat-card::before { 
-            content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 6px; 
-            transition: height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 0 0 28px 28px;
-            box-shadow: 0 -5px 15px rgba(255,255,255,0.5);
-        }
-        .stat-card:hover::before { height: 100%; z-index: -1; opacity: 0.15; }
-        
-        .stat-card.blue::before { background: linear-gradient(0deg, var(--primary-blue), transparent); }
-        .stat-card.orange::before { background: linear-gradient(0deg, var(--primary-orange), transparent); }
-        .stat-card.red::before { background: linear-gradient(0deg, var(--danger-red), transparent); }
-        .stat-card.green::before { background: linear-gradient(0deg, var(--primary-green), transparent); }
-        
-        .stat-label { font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; z-index: 2; }
-        .stat-value { font-size: 3rem; font-weight: 800; margin-top: 10px; color: var(--text-dark); line-height: 1; text-shadow: 2px 4px 10px rgba(255,255,255,0.8); z-index: 2; }
-        .stat-desc { font-size: 0.9rem; color: var(--primary-blue); margin-top: 12px; font-weight: 700; z-index: 2; }
+.panel-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-top:24px;}
+@media(max-width:980px){.panel-grid{grid-template-columns:1fr;}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card);}
+.panel h3{margin:0 0 14px 0;font-size:15px;font-weight:700;}
+.alert-row{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--border);font-size:13px;}
+.alert-row:last-child{border-bottom:none;}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.alert-row .a-title{font-weight:600;flex:1;}
+.alert-row .a-meta{color:var(--ink-faint);font-size:12px;}
+.empty-note{color:var(--ink-faint);font-size:13px;padding:10px 4px;}
 
-        /* Controls Panel */
-        .controls-panel { 
-            display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 1.5rem; margin-bottom: 2rem; 
-            padding: 1.2rem 1.8rem; border-radius: 24px;
-            opacity: 0; animation: fadeUpGlass 0.6s ease forwards 0.5s;
-        }
-        .search-box { 
-            background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.6); 
-            border-top: 2px solid rgba(255,255,255,0.9); border-left: 2px solid rgba(255,255,255,0.9);
-            box-shadow: inset 3px 3px 8px rgba(0,0,0,0.03), 0 5px 15px rgba(0,0,0,0.04);
-            border-radius: 16px; padding: 0.9rem 1.5rem; 
-            display: flex; align-items: center; gap: 12px; flex: 1; max-width: 450px; transition: all 0.4s ease; 
-        }
-        .search-box:focus-within { 
-            background: rgba(255,255,255,0.9); border-color: var(--primary-blue); 
-            box-shadow: 0 0 0 5px rgba(2, 132, 199, 0.2), inset 0 0 0 transparent; 
-            transform: translateY(-2px); 
-        }
-        .search-box input { background: transparent; border: none; outline: none; width: 100%; font-size: 0.95rem; font-weight: 600; color: var(--text-dark); }
-        .search-box i { color: var(--primary-blue); font-size: 1.2rem; }
-        
-        .filter-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-        .btn-filter { 
-            background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5); 
-            padding: 0.7rem 1.5rem; border-radius: 14px; font-size: 0.85rem; font-weight: 800; color: var(--text-muted);
-            border-top: 1px solid rgba(255,255,255,0.9); border-left: 1px solid rgba(255,255,255,0.9);
-        }
-        .btn-filter:hover { background: rgba(255,255,255,0.8); color: var(--primary-blue); transform: translateY(-3px); box-shadow: 5px 8px 20px rgba(0,0,0,0.05); }
-        .btn-filter.active { 
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); color: white; 
-            border-color: transparent; box-shadow: 0 10px 25px rgba(2, 132, 199, 0.3), inset 2px 2px 8px rgba(255,255,255,0.4);
-        }
+/* ---------- TABLE VIEW ---------- */
+.table-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+.table-desc{color:var(--ink-soft);font-size:13px;margin-top:2px;}
+.table-actions{display:flex;align-items:center;gap:10px;}
+.data-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);overflow:hidden;}
+.table-scroll{overflow-x:auto;}
+table.data-table{width:100%;border-collapse:collapse;min-width:640px;}
+table.data-table thead th{
+  text-align:left;font-size:11.3px;text-transform:none;color:var(--ink-faint);
+  font-weight:700;padding:13px 16px;background:var(--surface-soft);
+  border-bottom:1px solid var(--border);white-space:nowrap;
+}
+table.data-table tbody td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13.2px;vertical-align:middle;}
+table.data-table tbody tr:last-child td{border-bottom:none;}
+table.data-table tbody tr:hover{background:var(--surface-soft);}
+.cell-strong{font-weight:700;}
+.cell-muted{color:var(--ink-faint);}
+.row-actions{display:flex;gap:6px;justify-content:flex-end;}
+.mini-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--brand-1);font-size:12px;}
+.mini-btn:hover{background:var(--neutral-bg);color:var(--brand-2);}
+.mini-btn.danger{color:var(--danger);}
+.mini-btn.danger:hover{background:var(--danger-bg);color:var(--danger);}
+.thumb{width:34px;height:34px;border-radius:8px;object-fit:cover;border:1px solid var(--border);}
+.thumb-placeholder{width:34px;height:34px;border-radius:8px;background:var(--neutral-bg);display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-size:13px;}
+.file-chip{display:inline-flex;align-items:center;gap:6px;color:var(--brand-1);font-weight:600;font-size:12.6px;text-decoration:none;}
 
-        /* Tables & Section Animasi - Glass Container */
-        .page-section { display: none; opacity: 0; }
-        .page-section.active { display: block; animation: fadeUpGlass 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
-        
-        .data-card { border-radius: 28px; padding: 5px; }
-        .table-responsive { overflow-x: auto; width: 100%; border-radius: 24px; }
+/* ---------- AVATAR FOTO PROFIL (Data Karyawan) ---------- */
+.avatar-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid var(--border);box-shadow:0 2px 6px -2px rgba(18,26,45,.25);}
+.avatar-fallback{width:40px;height:40px;border-radius:50%;background:linear-gradient(150deg,#334155,#64748B);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13.5px;flex-shrink:0;}
 
-        table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; min-width: 1000px; }
-        thead { 
-            background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4)); 
-            backdrop-filter: blur(10px); 
-        }
-        th { 
-            padding: 1.4rem 1.5rem; font-size: 0.85rem; font-weight: 800; 
-            color: var(--primary-blue); border-bottom: 2px solid rgba(255,255,255,0.8); white-space: nowrap; text-transform: uppercase; letter-spacing: 1px;
-            text-shadow: 0 2px 4px rgba(255,255,255,1);
-        }
-        td { 
-            padding: 1.2rem 1.5rem; font-size: 0.95rem; border-bottom: 1px solid rgba(255,255,255,0.3); 
-            color: var(--text-dark); white-space: nowrap; vertical-align: middle; transition: all 0.3s ease; 
-            font-weight: 600;
-        }
-        
-        /* Realistic Table Row Liquid Hover */
-        tr { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        tr:hover td { 
-            background: linear-gradient(90deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 100%); 
-            color: var(--primary-blue); cursor: default;
-            box-shadow: inset 4px 0 0 var(--primary-blue);
-        }
-        
-        .icon-floating { font-size: 6rem; color: var(--primary-blue); margin-bottom: 1.5rem; animation: float3D 4s ease-in-out infinite; filter: drop-shadow(0 15px 20px rgba(2, 132, 199, 0.3)); }
-        @keyframes float3D { 0% { transform: translateY(0px) rotateX(0deg); } 50% { transform: translateY(-20px) rotateX(10deg); } 100% { transform: translateY(0px) rotateX(0deg); } }
+/* ---------- TOOLBAR TABEL: FILTER / PRINT / EXPORT ---------- */
+.table-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.btn-tool{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);border-radius:11px;padding:9px 15px;font-weight:700;font-size:12.8px;cursor:pointer;font-family:inherit;color:var(--ink);transition:transform .12s ease, box-shadow .12s ease, background .12s ease;}
+.btn-tool:hover{background:var(--surface-soft);transform:translateY(-2px);box-shadow:0 6px 14px -6px rgba(18,26,45,.2);}
+.btn-tool.active{background:var(--neutral-bg);border-color:var(--brand-1);}
+.btn-tool i{font-size:13px;}
+.btn-tool.tool-filter i{color:#7C3AED;}
+.btn-tool.tool-print i{color:#0284C7;}
+.btn-tool.tool-export i{color:#0E9F6E;}
 
-        /* Images & Badges Mewah */
-        .table-img { height: 55px; width: auto; border-radius: 12px; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: cover; transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: zoom-in; }
-        .table-img:hover { transform: scale(3) rotate(2deg); box-shadow: 0 25px 50px rgba(0,0,0,0.3), 0 0 0 4px rgba(255,255,255,0.9); z-index: 10; position: relative; }
-        
-        /* 3D Glass Pills */
-        .pill { 
-            padding: 0.6rem 1.4rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800; display: inline-block; letter-spacing: 1px; 
-            border-top: 1px solid rgba(255,255,255,0.8); border-left: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 3px 5px 10px rgba(0,0,0,0.05), inset -2px -2px 6px rgba(0,0,0,0.05);
-        }
-        .pill-pending { background: linear-gradient(135deg, rgba(253, 230, 138, 0.8), rgba(252, 211, 77, 0.8)); color: #b45309; backdrop-filter: blur(5px); }
-        .pill-selesai { background: linear-gradient(135deg, rgba(167, 243, 208, 0.8), rgba(110, 231, 183, 0.8)); color: #065f46; backdrop-filter: blur(5px); }
-        
-        .expiry-alert { 
-            font-weight: 800; padding: 0.6rem 1.2rem; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; 
-            border-top: 1px solid rgba(255,255,255,0.8); border-left: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 3px 5px 15px rgba(0,0,0,0.08), inset -2px -2px 6px rgba(0,0,0,0.05);
-            backdrop-filter: blur(5px);
-        }
-        .expiry-alert.red { background: linear-gradient(135deg, rgba(254, 202, 202, 0.9), rgba(248, 113, 113, 0.9)) !important; color: #991b1b !important; animation: pulseRed 2s infinite; }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
-        
-        .expiry-alert.orange { background: linear-gradient(135deg, rgba(254, 215, 170, 0.9), rgba(253, 186, 116, 0.9)) !important; color: #9a3412 !important; }
-        .expiry-alert.yellow { background: linear-gradient(135deg, rgba(254, 240, 138, 0.9), rgba(253, 224, 71, 0.9)) !important; color: #854d0e !important; }
+.filter-bar{display:none;flex-wrap:wrap;gap:12px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);margin-bottom:14px;}
+.filter-bar.show{display:flex;}
+.filter-field{display:flex;flex-direction:column;gap:5px;min-width:160px;}
+.filter-field label{font-size:11px;font-weight:700;color:var(--ink-faint);}
+.filter-field select{padding:8px 10px;border-radius:9px;border:1px solid var(--border);font-family:inherit;font-size:12.6px;color:var(--ink);background:var(--surface-soft);outline:none;}
+.filter-reset{align-self:flex-end;}
 
-        /* ================= LOGIN OVERLAY (Deep Water Glass) ================= */
-        .login-overlay {
-            position: fixed; inset: 0; z-index: 1000;
-            display: flex; align-items: center; justify-content: center; padding: 1.5rem;
-            background: rgba(2, 6, 23, 0.6);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .login-overlay.active { opacity: 1; visibility: visible; }
+/* ---------- JAM & TANGGAL TOPBAR ---------- */
+.topbar-clock{display:flex;align-items:center;gap:8px;font-size:12.4px;font-weight:600;color:var(--ink-soft);white-space:nowrap;padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:11px;}
+.topbar-clock i{color:var(--brand-1);font-size:12px;}
+.topbar-clock .tc-time{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;}
+@media(max-width:1080px){.topbar-clock{display:none;}}
 
-        .login-card {
-            width: 100%; max-width: 420px; 
-            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
-            border: 1px solid rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.8); border-left: 1px solid rgba(255,255,255,0.8);
-            border-radius: 32px; padding: 3rem 2.5rem;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 2px 2px 10px rgba(255,255,255,0.3);
-            transform: translateY(50px) scale(0.9); opacity: 0; transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .login-overlay.active .login-card { transform: translateY(0) scale(1); opacity: 1; transition-delay: 0.1s; }
-        .login-card.shake { animation: shakeCard 0.5s; }
-        @keyframes shakeCard { 10%, 90% { transform: translateX(-5px); } 20%, 80% { transform: translateX(8px); } 30%, 50%, 70% { transform: translateX(-10px); } 40%, 60% { transform: translateX(10px); } }
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11.6px;font-weight:700;white-space:nowrap;}
+.pill.p-green{background:var(--success-bg);color:var(--success);}
+.pill.p-amber{background:var(--warn-bg);color:var(--warn);}
+.pill.p-red{background:var(--danger-bg);color:var(--danger);}
+.pill.p-gray{background:var(--neutral-bg);color:var(--ink-soft);}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
 
-        .login-close {
-            position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; border: none;
-            background: rgba(255,255,255,0.1); color: #fff; cursor: pointer; font-size: 1rem;
-            display: flex; align-items: center; justify-content: center; transition: all 0.4s ease;
-            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3);
-        }
-        .login-close:hover { background: var(--danger-red); color: #fff; transform: rotate(90deg) scale(1.1); border-color: var(--danger-red); }
+.table-foot{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-top:1px solid var(--border);font-size:12.5px;color:var(--ink-soft);}
+.pager-btns{display:flex;gap:6px;}
 
-        .login-logo-wrap { text-align: center; margin-bottom: 1.5rem; }
-        .login-logo { height: 65px; width: auto; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
-        
-        .login-title { text-align: center; font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; letter-spacing: -0.5px; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .login-subtitle { text-align: center; font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 2.2rem; font-weight: 500; }
+.empty-state{padding:64px 20px;text-align:center;color:var(--ink-faint);}
+.empty-state i{font-size:30px;margin-bottom:12px;display:block;color:#C7D0E4;}
+.empty-state .es-title{color:var(--ink);font-weight:700;font-size:14.5px;margin-bottom:4px;}
 
-        .login-error {
-            display: none; align-items: center; gap: 10px; background: rgba(225, 29, 72, 0.2); border: 1px solid rgba(254, 202, 202, 0.5); color: #fecaca;
-            font-size: 0.85rem; font-weight: 600; padding: 1rem; border-radius: 14px; margin-bottom: 1.5rem; backdrop-filter: blur(10px);
-        }
-        .login-error.show { display: flex; animation: fadeUpGlass 0.4s ease; }
+/* ---------- MODAL ---------- */
+.overlay{position:fixed;inset:0;background:rgba(15,20,35,.48);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .18s ease;}
+.overlay.show{opacity:1;pointer-events:auto;}
+.modal{background:var(--surface);border-radius:22px;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 30px 60px -20px rgba(15,20,35,.4);transform:translateY(14px) scale(.98);transition:transform .18s ease;}
+.overlay.show .modal{transform:translateY(0) scale(1);}
+.modal.modal-sm{max-width:420px;}
+.modal-head{display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--border);}
+.modal-head-icon{width:42px;height:42px;border-radius:13px;background:linear-gradient(150deg,var(--c1,var(--brand-1)),var(--c2,var(--brand-2)));display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:inset 0 1px 1px rgba(255,255,255,.4), inset 0 -2px 4px rgba(0,0,0,.18);}
+.modal-head h3{margin:0;font-size:16.5px;font-weight:700;}
+.modal-head p{margin:1px 0 0 0;font-size:12px;color:var(--ink-faint);}
+.modal-close{margin-left:auto;width:32px;height:32px;border-radius:9px;border:none;background:var(--surface-soft);color:var(--ink-soft);cursor:pointer;flex-shrink:0;}
+.modal-body{padding:22px 24px;overflow-y:auto;}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
 
-        .input-group { margin-bottom: 1.4rem; }
-        .input-group label { font-size: 0.75rem; font-weight: 800; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.6rem; display: block; }
-        .input-wrap {
-            display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); border-top: 1px solid rgba(0,0,0,0.3);
-            border-radius: 16px; padding: 1rem 1.2rem; gap: 12px; transition: all 0.4s ease; box-shadow: inset 3px 3px 10px rgba(0,0,0,0.3);
-        }
-        .input-wrap:focus-within { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.1); box-shadow: inset 3px 3px 10px rgba(0,0,0,0.2), 0 0 15px rgba(255,255,255,0.2); transform: translateY(-2px); }
-        .input-wrap i { color: rgba(255,255,255,0.6); width: 18px; text-align: center; font-size: 1rem; }
-        .input-wrap input { border: none; outline: none; background: transparent; width: 100%; font-size: 1rem; font-weight: 600; color: #fff; font-family: inherit; }
-        .input-wrap input::placeholder { color: rgba(255,255,255,0.4); }
-        .toggle-pass { cursor: pointer; transition: color 0.3s ease; }
-        .toggle-pass:hover { color: #fff; }
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr;}}
+.f-field.span2{grid-column:1/-1;}
+.f-field label{display:block;font-size:12.4px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
+.f-field label .req{color:var(--danger);}
+.f-field input[type=text],.f-field input[type=password],.f-field input[type=number],.f-field input[type=date],.f-field input[type=time],.f-field input[type=datetime-local],.f-field select,.f-field textarea{
+  width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);
+  font-family:inherit;font-size:13.3px;color:var(--ink);background:var(--surface-soft);outline:none;
+  transition:border-color .12s ease, background .12s ease;
+}
+.f-field textarea{resize:vertical;min-height:74px;}
+.f-field input:focus,.f-field select:focus,.f-field textarea:focus{border-color:var(--brand-1);background:var(--surface);}
+.f-field input[disabled]{color:var(--ink-faint);cursor:not-allowed;}
+.f-hint{font-size:11px;color:var(--ink-faint);margin-top:5px;}
+.upload-box{border:1.5px dashed var(--border);border-radius:12px;padding:12px;display:flex;align-items:center;gap:12px;background:var(--surface-soft);}
+.upload-box .up-prev{width:44px;height:44px;border-radius:10px;background:var(--neutral-bg);display:flex;align-items:center;justify-content:center;color:var(--ink-faint);flex-shrink:0;overflow:hidden;}
+.upload-box .up-prev img{width:100%;height:100%;object-fit:cover;}
+.upload-box .up-info{flex:1;font-size:12.2px;color:var(--ink-soft);}
+.upload-box input[type=file]{display:none;}
+.upload-btn{font-size:12px;font-weight:700;color:var(--brand-1);cursor:pointer;padding:6px 10px;border-radius:8px;background:#EEF1FF;}
 
-        .remember-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.8rem; font-size: 0.85rem; color: rgba(255,255,255,0.8); font-weight: 600; }
-        .remember-row label { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .remember-row input[type="checkbox"] { accent-color: var(--primary-blue); width: 18px; height: 18px; cursor: pointer; }
+.toast-wrap{position:fixed;top:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:10px;}
+.toast{background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 14px 30px -10px rgba(0,0,0,.35);display:flex;align-items:center;gap:10px;min-width:220px;animation:toastIn .25s ease;}
+.toast.t-ok{background:#0B3B2E;}
+.toast.t-err{background:#5C0E22;}
+@keyframes toastIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
 
-        .btn-login-submit {
-            width: 100%; background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); color: #fff; border: none;
-            padding: 1.2rem; border-radius: 16px; font-size: 1rem; font-weight: 800; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 12px; 
-            border-top: 1px solid rgba(255,255,255,0.6); border-left: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3), inset 2px 2px 10px rgba(255,255,255,0.4);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden;
-        }
-        .btn-login-submit::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-            transform: skewX(-25deg); transition: 0.6s ease;
-        }
-        .btn-login-submit:hover::after { left: 150%; }
-        .btn-login-submit:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 2px 2px 15px rgba(255,255,255,0.6); }
-        .btn-login-submit:active { transform: scale(0.96) translateY(2px); box-shadow: inset 4px 4px 15px rgba(0,0,0,0.3); }
-        .btn-login-submit:disabled { opacity: 0.7; cursor: not-allowed; }
-        .btn-login-submit .fa-spinner { display: none; animation: spinSlow 1s linear infinite; }
-        .btn-login-submit.loading .fa-spinner { display: inline-block; }
-        .btn-login-submit.loading .btn-login-text { display: none; }
+/* ---------- LOGIN ---------- */
+.login-tabs{display:flex;gap:8px;margin-bottom:16px;}
+.login-tab{flex:1;text-align:center;padding:9px;border-radius:10px;font-weight:700;font-size:12.6px;color:var(--ink-soft);background:var(--surface-soft);border:1px solid var(--border);cursor:pointer;}
+.login-tab.active{background:linear-gradient(150deg,var(--brand-1),var(--brand-2));color:#fff;border-color:transparent;}
+.login-guest-box{text-align:center;padding:10px 4px 4px 4px;}
+.login-guest-box p{margin:0 0 14px 0;font-size:12.8px;color:var(--ink-soft);}
+.login-error{background:var(--danger-bg);color:var(--danger);font-size:12.4px;font-weight:600;border-radius:10px;padding:9px 12px;margin-bottom:14px;display:none;}
+.login-error.show{display:block;}
 
-        .login-footer-note { text-align: center; font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 1.8rem; font-weight: 600; }
+/* ---------- HALAMAN LOGIN (GATE) — tampil sebelum masuk ke aplikasi ---------- */
+#loginGate{
+  position:fixed;inset:0;z-index:600;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(109,93,246,.38), transparent 42%),
+    radial-gradient(circle at 86% 82%, rgba(52,87,247,.35), transparent 42%),
+    linear-gradient(150deg,#111935,#1C2750 60%,#26305C);
+}
+.gate-card{
+  width:100%;max-width:404px;background:var(--surface);
+  border-radius:var(--radius-lg);padding:34px 30px 30px 30px;
+  box-shadow:0 40px 90px -24px rgba(6,10,25,.55);
+  animation:gateIn .35s ease;
+}
+@keyframes gateIn{from{opacity:0;transform:translateY(10px) scale(.985);}to{opacity:1;transform:translateY(0) scale(1);}}
+.gate-brand{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.gate-logo{height:34px;width:auto;object-fit:contain;flex-shrink:0;}
+.gate-brand-text .t1{font-family:'Sora',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.2px;}
+.gate-brand-text .t2{font-size:11px;color:var(--ink-faint);margin-top:1px;}
+.gate-title{font-family:'Sora',sans-serif;font-size:21px;font-weight:700;margin:0 0 4px 0;letter-spacing:-.3px;}
+.gate-sub{font-size:13px;color:var(--ink-soft);margin:0 0 22px 0;line-height:1.5;}
+.gate-loading{display:flex;align-items:center;justify-content:center;gap:9px;padding:30px 4px;color:var(--ink-soft);font-size:13px;font-weight:600;}
+.identity-logout{width:30px;height:30px;border-radius:9px;border:1px solid var(--border);background:var(--surface);display:none;align-items:center;justify-content:center;color:var(--danger);cursor:pointer;flex-shrink:0;}
+.identity-logout:hover{background:var(--danger-bg);}
+.identity-logout.show{display:flex;}
+.role-badge{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:9.6px;font-weight:800;letter-spacing:.3px;background:var(--brand-1);color:#fff;vertical-align:1px;}
 
-        /* ================= TRANSITION SCREEN ================= */
-        .transition-screen {
-            position: fixed; inset: 0; z-index: 1100;
-            background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff;
-            opacity: 0; visibility: hidden; transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-        .transition-screen.active { opacity: 1; visibility: visible; }
-        .transition-logo {
-            width: 90px; height: 90px; border-radius: 28px; background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3), inset 2px 2px 15px rgba(255,255,255,0.2);
-            display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;
-            animation: pulseScale 2s ease-in-out infinite; 
-        }
-        .transition-logo i { font-size: 2.8rem; filter: drop-shadow(0 0 15px rgba(14, 165, 233, 0.8)); }
-        @keyframes pulseScale { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(5deg); } }
-        .transition-text { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .transition-dots { margin-top: 18px; }
-        .transition-dots span {
-            display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #0ea5e9; margin: 0 6px;
-            box-shadow: 0 0 10px rgba(14, 165, 233, 0.8); animation: dotBounce 1.4s infinite ease-in-out both;
-        }
-        .transition-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .transition-dots span:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes dotBounce { 0%, 80%, 100% { transform: scale(0); opacity: 0.3; } 40% { transform: scale(1.5); opacity: 1; } }
+/* ---------- BADGE MODE LIHAT SAJA ---------- */
+.view-only-badge{display:inline-flex;align-items:center;gap:6px;background:var(--warn-bg);color:var(--warn);font-weight:700;font-size:11.8px;padding:6px 12px;border-radius:99px;margin-left:10px;}
 
-        /* ================= APPSHEET EMBEDDED VIEW ================= */
-        .appsheet-view {
-            position: fixed; inset: 0; z-index: 900; background: var(--bg-color); display: flex; flex-direction: column;
-            opacity: 0; visibility: hidden; transform: scale(1.03); filter: blur(10px);
-            transition: all 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .appsheet-view.active { opacity: 1; visibility: visible; transform: scale(1); filter: blur(0); }
+/* ---------- HALAMAN PENGATURAN AKSES MENU ---------- */
+.access-mod-block{margin-bottom:18px;}
+.access-mod-title{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.access-mod-title .mini-badge{width:24px;height:24px;font-size:10.5px;}
+.access-mod-title span{font-size:12.8px;font-weight:800;color:var(--ink-soft);}
+.access-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border);}
+.access-row:last-child{border-bottom:none;}
+.access-row-label{display:flex;align-items:center;gap:10px;font-size:13.3px;font-weight:600;}
+.access-row-label i{color:var(--brand-1);width:16px;text-align:center;}
+.access-toggle{display:flex;gap:6px;flex-shrink:0;}
+.access-btn{border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--ink-soft);}
+.access-btn.a-edit.active{background:var(--success-bg);color:var(--success);border-color:var(--success);}
+.access-btn.a-view.active{background:var(--warn-bg);color:var(--warn);border-color:var(--warn);}
 
-        .appsheet-topbar {
-            height: 70px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 2rem; background: var(--glass-strong); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid var(--glass-border-light); box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 10; gap: 1rem;
-        }
-        .appsheet-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
-        .appsheet-brand img { height: 34px; width: auto; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-        .appsheet-brand-text { font-size: 0.95rem; font-weight: 800; color: var(--text-dark); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px rgba(255,255,255,0.8); }
-        .appsheet-brand-text span { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary-blue); text-transform: uppercase; letter-spacing: 1px; }
+@media(max-width:880px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);box-shadow:20px 0 40px rgba(0,0,0,.15);}
+  .main{margin-left:0;}
+  #menuToggle{display:flex;align-items:center;justify-content:center;}
+  .searchbox{display:none;}
+}
 
-        .appsheet-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-        .btn-topbar {
-            display: flex; align-items: center; gap: 10px; padding: 0.7rem 1.4rem; border-radius: 14px; font-size: 0.85rem;
-            font-weight: 800; cursor: pointer; border: none; transition: all 0.4s ease;
-            background: rgba(255,255,255,0.6); color: var(--text-muted); 
-            border-top: 1px solid rgba(255,255,255,0.9); border-left: 1px solid rgba(255,255,255,0.9);
-            box-shadow: 3px 5px 15px rgba(0,0,0,0.05), inset -2px -2px 6px rgba(0,0,0,0.02);
-        }
-        .btn-topbar:hover { transform: translateY(-3px); box-shadow: 5px 10px 20px rgba(0,0,0,0.1); background: rgba(255,255,255,0.9); color: var(--primary-blue); }
-        .btn-topbar:active { transform: scale(0.95) translateY(2px); box-shadow: inset 3px 3px 8px rgba(0,0,0,0.1); }
-        
-        .btn-topbar.back { background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); color: #fff; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3), inset 2px 2px 8px rgba(255,255,255,0.4); }
-        .btn-topbar.back:hover { box-shadow: 0 12px 25px rgba(2, 132, 199, 0.4); color: white; }
-        .btn-topbar.logout { color: var(--danger-red); }
-        .btn-topbar.logout:hover { background: var(--danger-red); color: #fff; border-color: transparent; }
+/* =====================================================================
+   EFEK VISUAL — HOVER & OVERLAY KLIK
+   ===================================================================== */
+.nav-dash,.nav-item,.nav-group-head,.icon-btn,.mini-btn,.identity-card,
+.identity-opt,.modal-close,.upload-btn,.btn,table.data-table tbody tr{
+  transition:background .16s ease,color .16s ease,transform .12s cubic-bezier(.34,1.4,.64,1),
+             box-shadow .16s ease,border-color .16s ease;
+}
+.nav-dash:hover,.nav-item:hover{transform:translateX(2px);}
+.nav-group-head:hover{transform:translateX(1px);}
+.identity-card:hover,.identity-opt:hover{transform:translateX(2px);}
+.icon-btn:hover,.mini-btn:hover{transform:translateY(-2px);box-shadow:0 6px 14px -6px rgba(18,26,45,.25);}
+.nav-dash:active,.nav-item:active,.nav-group-head:active,.icon-btn:active,
+.mini-btn:active,.identity-card:active,.identity-opt:active,
+.modal-close:active,.upload-btn:active{transform:scale(.95);}
 
-        .appsheet-frame-wrap { flex: 1; position: relative; width: 100%; overflow: hidden; background: rgba(255,255,255,0.3); }
-        .appsheet-frame-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-        .appsheet-loading {
-            position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.5); backdrop-filter: blur(20px); gap: 1.5rem; transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .appsheet-loading.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-        .spinner-ring { width: 60px; height: 60px; border: 5px solid rgba(255,255,255,0.5); border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; box-shadow: 0 0 20px rgba(2, 132, 199, 0.2); }
-        @keyframes spin { to { transform: rotate(360deg); } }
+/* overlay ripple saat diklik — dipasang lewat JS ke elemen yang diklik */
+.fx-ripple-host{position:relative;overflow:hidden;}
+.fx-ripple-span{
+  position:absolute;border-radius:50%;pointer-events:none;
+  transform:scale(0);opacity:.55;background:rgba(52,87,247,.22);
+  animation:fxRipple .55s ease-out forwards;
+}
+.fx-ripple-span.fx-light{background:rgba(255,255,255,.5);}
+.fx-ripple-span.fx-danger{background:rgba(225,29,72,.22);}
+@keyframes fxRipple{to{transform:scale(2.6);opacity:0;}}
 
-        /* ============================================================
-           RESPONSIVE DESIGN (PC, TABLET, MOBILE)
-        ============================================================= */
-        @media (max-width: 1200px) {
-            .summary-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+/* overlay lampu sorot yang mengikuti kursor di kartu KPI dashboard */
+.kpi-card{position:relative;isolation:isolate;overflow:hidden;}
+.kpi-card::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;z-index:0;
+  background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),
+              rgba(52,87,247,.14), transparent 72%);
+  opacity:0;transition:opacity .25s ease;pointer-events:none;
+}
+.kpi-card:hover::before{opacity:1;}
+.kpi-card>*{position:relative;z-index:1;}
 
-        @media (max-width: 992px) {
-            body { flex-direction: column; }
-            
-            .sidebar { 
-                width: 100%; height: auto; position: relative; padding: 1.5rem; 
-                border-right: none; border-bottom: 1px solid var(--glass-border-light);
-                box-shadow: 0 10px 20px var(--glass-shadow);
-            }
-            .brand-logo { margin-bottom: 1rem; align-items: center; text-align: center; }
-            .brand-logo .sidebar-logo { height: 50px; }
-            
-            /* Ubah menu menjadi horizontal scroll di mobile */
-            .nav-list { 
-                display: flex; flex-direction: row; overflow-x: auto; gap: 10px; 
-                margin-bottom: 0; padding-bottom: 10px;
-            }
-            /* Sembunyikan scrollbar untuk tampilan mobile nav yang lebih bersih */
-            .nav-list::-webkit-scrollbar { height: 6px; display: none; }
-            .nav-item { margin-bottom: 0; flex-shrink: 0; padding: 0.7rem 1.2rem; }
-            .sidebar-footer { display: none; } /* Sembunyikan footer sidebar di layar sempit */
-
-            .main-content { 
-                margin-left: 0; width: 100%; padding: 2rem 1.5rem; 
-            }
-        }
-
-        @media (max-width: 768px) {
-            header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-            .header-actions { width: 100%; align-items: flex-start; }
-            .action-buttons { flex-wrap: wrap; width: 100%; }
-            .btn-action, .btn-masuk-sistem { flex: 1 1 calc(50% - 12px); justify-content: center; }
-            
-            .controls-panel { flex-direction: column; align-items: stretch; padding: 1.5rem; }
-            .search-box { max-width: 100%; }
-            .filter-row { justify-content: center; width: 100%; }
-            .btn-filter { flex: 1 1 auto; text-align: center; }
-            
-            .summary-grid { gap: 1.5rem; margin-bottom: 2.5rem; }
-            .stat-card { padding: 1.5rem; }
-        }
-
-        @media (max-width: 640px) {
-            .login-card { padding: 2.5rem 1.8rem; border-radius: 24px; }
-            .appsheet-topbar { padding: 0 1rem; height: 60px; }
-            .appsheet-brand-text { font-size: 0.8rem; }
-            .btn-topbar span.label-text { display: none; }
-            .btn-topbar { padding: 0.6rem 0.9rem; }
-        }
-
-        @media (max-width: 480px) {
-            .summary-grid { grid-template-columns: 1fr; }
-            .action-buttons { flex-direction: column; }
-            .btn-action, .btn-masuk-sistem { width: 100%; flex: 1 1 auto; }
-            .filter-row { flex-direction: column; }
-            .btn-filter { width: 100%; }
-            .main-content { padding: 1.5rem 1rem; }
-            .header-info h1 { font-size: 1.8rem; }
-            
-            .appsheet-actions { flex-wrap: wrap; justify-content: flex-end; }
-        }
-
-        /* Print Header */
-        .print-header-only { display: none; }
-        @media print {
-            body { background: white !important; animation: none !important; color: black !important; filter: none !important; }
-            .sidebar, .controls-panel, .sync-status, .action-buttons, .summary-grid { display: none !important; }
-            .login-overlay, .transition-screen, .appsheet-view { display: none !important; }
-            .main-content { margin-left: 0 !important; width: 100% !important; padding: 0 !important; }
-            header { display: none !important; } 
-            .print-header-only { display: block !important; text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #0f172a; }
-            .print-header-only h1 { font-size: 22px; font-weight: 800; color: #000; margin-bottom: 5px; }
-            .print-header-only h3 { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 5px; }
-            .print-header-only p { font-size: 12px; color: #555; }
-            .glass-panel, .data-card { box-shadow: none !important; border: none !important; border-radius: 0 !important; background: transparent !important; backdrop-filter: none !important; }
-            .table-responsive { overflow: visible !important; }
-            table { width: 100% !important; border: 1px solid #ddd; }
-            th { background: #f1f5f9 !important; color: black !important; border: 1px solid #ccc !important; padding: 8px !important; font-size: 11px !important; text-shadow: none !important;}
-            td { border: 1px solid #ddd !important; padding: 6px !important; font-size: 10px !important; white-space: normal !important; word-wrap: break-word !important; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .page-section { display: none !important; }
-            .page-section.active { display: block !important; }
-            .table-img { height: 30px !important; border: none !important; box-shadow: none !important; }
-            @page { margin: 1.5cm; size: landscape; } 
-        }
-    </style>
+/* ---------- PRINT (fallback jika user Ctrl+P langsung) ---------- */
+@media print{
+  .sidebar,.topbar,.table-actions,.filter-bar,.table-foot,.toast-wrap,.no-print{display:none!important;}
+  .main{margin-left:0;}
+  body{background:#fff;}
+  .content{padding:0;}
+  .data-card{box-shadow:none;border:none;}
+}
+</style>
 </head>
 <body>
 
-    <aside class="sidebar glass-panel">
-        <div class="brand-logo glass-interactive">
-            <img src="MSB Logo.png" alt="PT Murinda Sentra Baja" class="sidebar-logo">
-            <div class="brand-text">
-                <h2>General Affairs System</h2>
-                <div class="location-text">KALIJATI, SUBANG</div>
-            </div>
-        </div>
-        
-        <nav class="nav-list">
-            <li class="nav-item glass-interactive active" onclick="switchTab('overview', this)"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('aset', this)"><i class="fa-solid fa-box-archive"></i> Aset & Inventaris</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('permintaan', this)"><i class="fa-solid fa-file-invoice"></i> Permintaan Barang</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('maintenance', this)"><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('kendaraan', this)"><i class="fa-solid fa-car-side"></i> Kendaraan Operasional</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('pemakaian', this)"><i class="fa-solid fa-route"></i> Pemakaian Kendaraan</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('master', this)"><i class="fa-solid fa-database"></i> Master Barang</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('atk', this)"><i class="fa-solid fa-pen-nib"></i> Stok ATK</li>
-            <li class="nav-item glass-interactive" onclick="switchTab('legalitas', this)"><i class="fa-solid fa-file-shield"></i> Dokumen Legalitas</li>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <span>License to:</span><br>
-            <strong style="color:var(--primary-blue); font-size:0.8rem;">PT Murinda Sentra Baja</strong><br>
-            <span style="opacity: 0.8;">Developed by Aspuro Aamarulloh Khoiri</span>
-        </div>
-    </aside>
-
-    <main class="main-content">
-        <div class="print-header-only">
-            <h1>PT Murinda Sentra Baja - General Affairs System</h1>
-            <h3 id="printTabTitle">Laporan Executive Dashboard</h3>
-            <p>Tanggal Cetak: <span id="printDate"></span></p>
-        </div>
-
-        <header>
-            <div class="header-info">
-                <h1 id="tabTitle">Executive Dashboard</h1>
-                <p id="tabDesc">General Affairs System - PT Murinda Sentra Baja</p>
-            </div>
-            <div class="header-actions">
-                <div class="sync-status glass-interactive"><i class="fa-solid fa-rotate"></i> <span id="syncStatus">Memuat Data...</span></div>
-                <div class="action-buttons">
-                    <button class="btn-masuk-sistem glass-interactive" onclick="openLoginOverlay()"><i class="fa-solid fa-right-to-bracket"></i> Masuk Sistem</button>
-                    <button class="btn-action glass-interactive" onclick="loadSheetData()"><i class="fa-solid fa-arrows-rotate"></i> Refresh Data</button>
-                    <button class="btn-action print glass-interactive" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak / PDF</button>
-                    <button class="btn-action excel glass-interactive" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
-                </div>
-            </div>
-        </header>
-
-        <div class="summary-grid">
-            <div class="stat-card blue glass-panel glass-interactive"><div class="stat-label">Total Item Asset</div><div class="stat-value" id="count-aset">0</div><div class="stat-desc">Unit terdaftar aktif</div></div>
-            <div class="stat-card orange glass-panel glass-interactive"><div class="stat-label">Permintaan Pengadaan</div><div class="stat-value" id="count-pending">0</div><div class="stat-desc">Status menunggu / proses</div></div>
-            <div class="stat-card red glass-panel glass-interactive"><div class="stat-label">Data Alert & Expired</div><div class="stat-value" id="count-expired">0</div><div class="stat-desc">Stok Menipis / Jatuh Tempo</div></div>
-            <div class="stat-card green glass-panel glass-interactive"><div class="stat-label">Armada Ready</div><div class="stat-value" id="count-car">0</div><div class="stat-desc">Kendaraan siap jalan</div></div>
-        </div>
-
-        <div class="controls-panel glass-panel">
-            <div class="search-box glass-interactive">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="globalSearch" placeholder="Ketik kata kunci untuk mencari..." onkeyup="filterTableData()">
-            </div>
-            <div class="filter-row">
-                <button class="btn-filter glass-interactive active" onclick="applyQuickFilter('ALL', this)">Semua Data</button>
-                <button class="btn-filter glass-interactive" onclick="applyQuickFilter('PENDING', this)">Pending / Proses</button>
-                <button class="btn-filter glass-interactive" onclick="applyQuickFilter('SELESAI', this)">Selesai / Digunakan</button>
-                <button class="btn-filter glass-interactive" onclick="applyQuickFilter('ALERT', this)" style="color:var(--danger-red); font-weight:800; text-shadow: 0 0 5px rgba(225,29,72,0.3);"><i class="fa-solid fa-triangle-exclamation"></i> Tampilkan Alert</button>
-            </div>
-        </div>
-
-        <section id="section-overview" class="page-section active">
-            <div class="data-card glass-panel" style="padding: 6rem 2rem; text-align: center;">
-                <i class="fa-solid fa-shield-check icon-floating"></i>
-                <h2 style="margin-bottom: 0.8rem; color: var(--text-dark); font-size: 2.2rem; font-weight: 800; text-shadow: 0 4px 10px rgba(255,255,255,0.9);">PT Murinda Sentra Baja - ERP System</h2>
-                <p style="color: var(--text-muted); font-size: 1.2rem; font-weight: 600; background: rgba(255,255,255,0.5); display: inline-block; padding: 8px 24px; border-radius: 12px; backdrop-filter: blur(5px);">Sistem Informasi General Affairs Terintegrasi</p>
-            </div>
-        </section>
-
-        <section id="section-aset" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-aset"><thead></thead><tbody></tbody></table></div></div></section>
-        <section id="section-permintaan" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-permintaan"><thead></thead><tbody></tbody></table></div></div></section>
-        <section id="section-maintenance" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-maintenance"><thead></thead><tbody></tbody></table></div></div></section>
-        <section id="section-kendaraan" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-kendaraan"><thead></thead><tbody></tbody></table></div></div></section>
-        <section id="section-pemakaian" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-pemakaian"><thead></thead><tbody></tbody></table></div></div></section>
-        <section id="section-master" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-master"><thead></thead><tbody></tbody></table></div></div></section>
-        <section id="section-atk" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-atk"><thead></thead><tbody></tbody></table></div></div></section>
-        <section id="section-legalitas" class="page-section"><div class="data-card glass-panel"><div class="table-responsive"><table id="table-legalitas"><thead></thead><tbody></tbody></table></div></div></section>
-    </main>
-
-    <!-- ============================================================
-         LOGIN OVERLAY
-    ============================================================= -->
-    <div class="login-overlay" id="loginOverlay" onclick="if(event.target===this) closeLoginOverlay()">
-        <div class="login-card" id="loginCard">
-            <button type="button" class="login-close" onclick="closeLoginOverlay()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
-
-            <div class="login-logo-wrap">
-                <img src="MSB Logo.png" alt="MSB Logo" class="login-logo" id="loginLogoImg">
-            </div>
-
-            <h2 class="login-title">Masuk ke Sistem</h2>
-            <p class="login-subtitle">General Affairs System — PT Murinda Sentra Baja</p>
-
-            <div class="login-error" id="loginError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
-
-            <form id="loginForm" onsubmit="handleLoginSubmit(event)" novalidate>
-                <div class="input-group">
-                    <label for="loginUsername">Username</label>
-                    <div class="input-wrap glass-interactive">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username" required>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="loginPassword">Password</label>
-                    <div class="input-wrap glass-interactive">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="Masukkan password" autocomplete="current-password" required>
-                        <i class="fa-solid fa-eye toggle-pass" id="togglePassIcon" onclick="togglePasswordVisibility()" role="button" aria-label="Tampilkan password"></i>
-                    </div>
-                </div>
-                <div class="remember-row">
-                    <label><input type="checkbox" id="rememberMe"> Ingat saya di perangkat ini</label>
-                </div>
-                <button type="submit" class="btn-login-submit" id="btnLoginSubmit">
-                    <i class="fa-solid fa-circle-notch fa-spinner"></i>
-                    <span class="btn-login-text"><i class="fa-solid fa-right-to-bracket"></i> Masuk</span>
-                </button>
-            </form>
-            <p class="login-footer-note">Akses khusus karyawan PT Murinda Sentra Baja</p>
-        </div>
+<!-- HALAMAN LOGIN (GATE) — tampil pertama kali sebelum masuk ke aplikasi -->
+<div id="loginGate">
+  <div class="gate-card">
+    <div class="gate-brand">
+      <img src="MSB_Logo.png" alt="PT Murinda Sentra Baja" class="gate-logo">
+      <div class="gate-brand-text">
+        <div class="t1">GA-ERP</div>
+        <div class="t2">PT Murinda Sentra Baja</div>
+      </div>
     </div>
 
-    <!-- ============================================================
-         TRANSITION SCREEN
-    ============================================================= -->
-    <div class="transition-screen" id="transitionScreen">
-        <div class="transition-logo"><i class="fa-solid fa-shield-halved"></i></div>
-        <div class="transition-text" id="transitionText">Menghubungkan ke Sistem AppSheet...</div>
-        <div class="transition-dots"><span></span><span></span><span></span></div>
-    </div>
+    <div id="gateLoading" class="gate-loading"><i class="fa-solid fa-spinner fa-spin"></i> Memuat data sistem...</div>
 
-    <!-- ============================================================
-         APPSHEET VIEW
-    ============================================================= -->
-    <div class="appsheet-view" id="appsheetView">
-        <div class="appsheet-topbar">
-            <div class="appsheet-brand">
-                <img src="MSB Logo.png" alt="Logo" onerror="this.style.display='none'">
-                <div class="appsheet-brand-text">General Affairs System<span id="appsheetUserLabel"></span></div>
-            </div>
-            <div class="appsheet-actions">
-                <button class="btn-topbar glass-interactive" onclick="openAppsheetNewTab()"><i class="fa-solid fa-up-right-from-square"></i> <span class="label-text">Buka Tab Baru</span></button>
-                <button class="btn-topbar logout glass-interactive" onclick="logoutSystem()"><i class="fa-solid fa-right-from-bracket"></i> <span class="label-text">Logout</span></button>
-                <button class="btn-topbar back glass-interactive" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> <span class="label-text">Kembali ke Dashboard</span></button>
-            </div>
+    <div id="gateFormWrap" style="display:none;">
+      <h1 class="gate-title">Selamat datang</h1>
+      <p class="gate-sub">Masuk untuk mengelola data General Affairs, atau lanjutkan sebagai tamu untuk melihat data.</p>
+
+      <div class="login-tabs">
+        <div class="login-tab active" id="gateTabLogin" onclick="switchLoginTab('login','gate')">Login</div>
+        <div class="login-tab" id="gateTabGuest" onclick="switchLoginTab('guest','gate')">Hanya Lihat</div>
+      </div>
+
+      <div id="gateLoginPane">
+        <div class="login-error" id="gateLoginError">Username atau password salah.</div>
+        <div class="form-grid" style="grid-template-columns:1fr;">
+          <div class="f-field">
+            <label>Username</label>
+            <input type="text" id="gateUsername" placeholder="Masukkan username" autocomplete="username">
+          </div>
+          <div class="f-field">
+            <label>Password</label>
+            <input type="password" id="gatePassword" placeholder="Masukkan password" autocomplete="current-password" onkeydown="if(event.key==='Enter')attemptLogin('gate');">
+          </div>
         </div>
-        <div class="appsheet-frame-wrap">
-            <div class="appsheet-loading" id="appsheetLoading">
-                <div class="spinner-ring"></div>
-                <p style="font-weight:800; color:var(--primary-blue); font-size:1rem; text-shadow: 0 2px 5px rgba(255,255,255,0.8);">Memuat MSB GA System...</p>
-            </div>
-            <iframe id="appsheetIframe" src="about:blank" title="MSB General Affairs AppSheet"
-                    allow="camera; geolocation; microphone" referrerpolicy="strict-origin-when-cross-origin"
-                    onload="document.getElementById('appsheetLoading').classList.add('hide')"></iframe>
+        <button class="btn btn-primary" id="gateLoginBtn" style="width:100%;justify-content:center;margin-top:6px;" onclick="attemptLogin('gate')"><i class="fa-solid fa-right-to-bracket"></i> Masuk</button>
+      </div>
+
+      <div id="gateGuestPane" style="display:none;">
+        <div class="login-guest-box">
+          <p>Anda akan menjelajah GA-ERP dalam mode <b>hanya lihat</b> — semua data bisa dibaca, tetapi tombol tambah/ubah/hapus tidak aktif.</p>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;" onclick="enterAsGuest('gate')"><i class="fa-solid fa-eye"></i> Masuk sebagai Tamu</button>
         </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <script>
-        // Set Tanggal Cetak Hari Ini
-        document.getElementById('printDate').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+<div id="app" style="display:none;">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="MSB_Logo.png" alt="PT Murinda Sentra Baja" class="brand-logo">
+      <div class="brand-divider"></div>
+      <div class="brand-text">
+        <div class="t1">GA-ERP</div>
+        <div class="t2">General Affairs</div>
+      </div>
+    </div>
+    <div class="nav-scroll" id="navScroll"></div>
+    <div class="sidebar-foot">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="identity-card" id="identityCard" style="flex:1;min-width:0;" onclick="openLoginModal()">
+          <div class="identity-avatar" id="idAvatar">?</div>
+          <div style="flex:1;min-width:0;">
+            <div class="identity-name" id="idName">Tamu (Lihat Saja)</div>
+            <div class="identity-sub" id="idSub">Klik untuk login</div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="font-size:11px;color:var(--ink-faint);"></i>
+        </div>
+        <button class="identity-logout" id="logoutBtn" title="Keluar" onclick="event.stopPropagation();doLogout();"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+  </aside>
 
-        let currentTabId = 'overview';
-        let currentQuickFilter = 'ALL';
+  <div class="main">
+    <div class="topbar">
+      <button id="menuToggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
+      <div class="crumb">
+        <div class="c-eyebrow" id="crumbEyebrow">Beranda</div>
+        <h2 id="crumbTitle">Dashboard</h2>
+      </div>
+      <div class="searchbox" id="searchBox" style="display:none;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Cari data di tabel ini..." oninput="onSearchInput()">
+      </div>
+      <div style="flex:1;"></div>
+      <div class="topbar-clock" id="topbarClock"><i class="fa-solid fa-calendar-days"></i><span id="tcDate">-</span><span class="tc-time" id="tcTime">-</span></div>
+      <button class="icon-btn" title="Muat ulang data" onclick="manualRefresh()"><i class="fa-solid fa-rotate-right"></i></button>
+      <button class="btn btn-primary" id="addBtn" style="display:none;" onclick="openForm(currentSheet,null)"><i class="fa-solid fa-plus"></i><span id="addBtnLabel">Tambah</span></button>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
 
-        function switchTab(tabId, el) {
-            const titles = {
-                'overview': 'Executive Dashboard', 'aset': 'Aset & Inventaris', 'permintaan': 'Permintaan Barang',
-                'maintenance': 'Data Maintenance', 'kendaraan': 'Kendaraan Operasional', 'pemakaian': 'Log Pemakaian Kendaraan',
-                'master': 'Master Database Barang', 'atk': 'Manajemen Stok ATK', 'legalitas': 'Dokumen Legalitas & Perizinan'
-            };
-            
-            let newTitle = titles[tabId] || 'Dashboard';
-            document.getElementById('tabTitle').innerText = newTitle;
-            document.getElementById('printTabTitle').innerText = "Laporan " + newTitle;
+<div class="toast-wrap" id="toastWrap"></div>
 
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-            el.classList.add('active');
-            currentTabId = tabId;
-            document.getElementById('section-' + tabId).classList.add('active');
-            filterTableData();
-        }
+<!-- MODAL: FORM TAMBAH/EDIT -->
+<div class="overlay" id="formOverlay">
+  <div class="modal" id="formModal">
+    <div class="modal-head">
+      <div class="modal-head-icon" id="formIcon"><i class="fa-solid fa-plus"></i></div>
+      <div>
+        <h3 id="formTitle">Tambah Data</h3>
+        <p id="formSub">-</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('formOverlay')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body"><div class="form-grid" id="formGrid"></div></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('formOverlay')">Batal</button>
+      <button class="btn btn-primary" id="formSubmitBtn" onclick="submitForm()"><i class="fa-solid fa-check"></i> Simpan</button>
+    </div>
+  </div>
+</div>
 
-        function parseAndCheckExpiry(dateStr) {
-            if (!dateStr || dateStr === '-' || dateStr.trim() === '') return { isAlert: false, text: dateStr };
-            let targetDate = null;
-            let parts = dateStr.trim().split(/[-/\s]/);
-            if (parts.length >= 3) {
-                let dayOrYear1 = parts[0];
-                let monthStr = parts[1].toLowerCase();
-                let yearOrDay3 = parts[2];
-                let day, month = -1, year;
-                if (dayOrYear1.length === 4) { 
-                    year = parseInt(dayOrYear1);
-                    day = parseInt(yearOrDay3);
-                } else { 
-                    day = parseInt(dayOrYear1);
-                    year = parseInt(yearOrDay3);
-                    if (year < 100) year += 2000; 
-                }
-                if (!isNaN(monthStr)) { month = parseInt(monthStr) - 1; } 
-                else {
-                    const monthMap = { 'jan':0, 'feb':1, 'mar':2, 'apr':3, 'mei':4, 'may':4, 'jun':5, 'jul':6, 'agu':7, 'aug':7, 'sep':8, 'okt':9, 'oct':9, 'nov':10, 'des':11 };
-                    for (let key in monthMap) { if (monthStr.includes(key)) { month = monthMap[key]; break; } }
-                }
-                if (month !== -1 && !isNaN(day) && !isNaN(year)) { targetDate = new Date(year, month, day); }
-            }
-            if (!targetDate || isNaN(targetDate)) return { isAlert: false, text: dateStr };
-            let today = new Date(); today.setHours(0,0,0,0); targetDate.setHours(0,0,0,0);
-            let daysDiff = Math.ceil((targetDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
-            
-            if (daysDiff <= 30) {
-                let alertClass = 'yellow'; let icon = '🔔';
-                if (daysDiff <= 7) { alertClass = 'red'; icon = '🚨'; } 
-                else if (daysDiff <= 14) { alertClass = 'orange'; icon = '⚠️'; }
-                let timeText = daysDiff < 0 ? 'Expired' : (daysDiff === 0 ? 'Hari Ini' : 'H-' + daysDiff);
-                return { isAlert: true, text: `<span class="expiry-alert ${alertClass}" data-alert="true">${icon} ${dateStr} (${timeText})</span>` };
-            }
-            return { isAlert: false, text: dateStr };
-        }
+<!-- MODAL: KONFIRMASI HAPUS -->
+<div class="overlay" id="deleteOverlay">
+  <div class="modal modal-sm">
+    <div class="modal-head">
+      <div class="modal-head-icon" style="background:linear-gradient(150deg,#E11D48,#FB7185);"><i class="fa-solid fa-trash"></i></div>
+      <div><h3>Hapus data?</h3><p>Tindakan ini tidak bisa dibatalkan.</p></div>
+      <button class="modal-close" onclick="closeModal('deleteOverlay')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body"><p id="deleteMsg" style="margin:0;font-size:13.5px;color:var(--ink-soft);"></p></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('deleteOverlay')">Batal</button>
+      <button class="btn" style="background:var(--danger);color:#fff;" id="deleteConfirmBtn">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
 
-        function renderSheet(tableId, rows) {
-            const table = document.getElementById(tableId);
-            if (!table) return;
-            const thead = table.querySelector('thead');
-            const tbody = table.querySelector('tbody');
-            thead.innerHTML = ""; tbody.innerHTML = "";
-            
-            if (!rows || rows.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='10' style='text-align:center; padding: 3rem; color: var(--text-muted); font-weight: 600;'>Tidak ada data ditemukan</td></tr>"; return;
-            }
+<!-- MODAL: LOGIN -->
+<div class="overlay" id="loginOverlay">
+  <div class="modal modal-sm">
+    <div class="modal-head">
+      <div class="modal-head-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+      <div><h3>Masuk ke GA-ERP</h3><p>Login untuk bisa menambah/mengubah data</p></div>
+      <button class="modal-close" onclick="closeModal('loginOverlay')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="login-tabs">
+        <div class="login-tab active" id="tabLogin" onclick="switchLoginTab('login')">Login</div>
+        <div class="login-tab" id="tabGuest" onclick="switchLoginTab('guest')">Hanya Lihat</div>
+      </div>
 
-            const appsheetTableNames = {
-                'table-aset': 'Aset dan Inventaris', 'table-permintaan': 'Permintaan Barang', 'table-maintenance': 'Maintenance',
-                'table-kendaraan': 'Kendaraan Operasional', 'table-pemakaian': 'Pemakaian Kendaraan',
-                'table-master': 'Master Barang', 'table-atk': 'ATK', 'table-legalitas': 'Dokumen Legalitas'
-            };
-            const appsheetNameMap = appsheetTableNames[tableId] || '';
-            const headers = rows[0]; const headerRow = document.createElement('tr');
-            const expiryKeywords = ['berlaku', 'pajak', 'servis', 'expired', 'tempo', 'akhir'];
-            let expiryColumnIndices = []; let colStokSaatIni = -1; let colStokMinimal = -1;
+      <div id="loginPane">
+        <div class="login-error" id="loginError">Username atau password salah.</div>
+        <div class="form-grid" style="grid-template-columns:1fr;">
+          <div class="f-field">
+            <label>Username</label>
+            <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username">
+          </div>
+          <div class="f-field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Masukkan password" autocomplete="current-password" onkeydown="if(event.key==='Enter')attemptLogin();">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="loginSubmitBtn" style="width:100%;justify-content:center;margin-top:6px;" onclick="attemptLogin('modal')"><i class="fa-solid fa-right-to-bracket"></i> Masuk</button>
+      </div>
 
-            headers.forEach((headerText, index) => {
-                const th = document.createElement('th'); th.innerText = headerText || "-"; headerRow.appendChild(th);
-                let headerLower = (headerText || "").toLowerCase();
-                if (expiryKeywords.some(keyword => headerLower.includes(keyword))) expiryColumnIndices.push(index);
-                if (headerLower === "stok saat ini" || headerLower === "stok") colStokSaatIni = index;
-                if (headerLower === "stok minimal" || headerLower.includes("min stok")) colStokMinimal = index;
-            });
-            thead.appendChild(headerRow);
+      <div id="guestPane" style="display:none;">
+        <div class="login-guest-box">
+          <p>Anda akan menjelajah GA-ERP dalam mode <b>hanya lihat</b> — semua data bisa dibaca, tetapi tombol tambah/ubah/hapus tidak aktif.</p>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;" onclick="enterAsGuest('modal')"><i class="fa-solid fa-eye"></i> Masuk sebagai Tamu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-            if (rows.length > 1) {
-                rows.slice(1).forEach(row => {
-                    const tr = document.createElement('tr'); let hasAlertRow = false;
-                    let currentStokValue = (colStokSaatIni !== -1) ? parseFloat(row[colStokSaatIni]) : null;
-                    let minStokValue = (colStokMinimal !== -1) ? parseFloat(row[colStokMinimal]) : null;
-                    let isLowStock = (currentStokValue !== null && minStokValue !== null && !isNaN(currentStokValue) && !isNaN(minStokValue) && currentStokValue <= minStokValue);
-                    
-                    row.forEach((cell, cellIndex) => {
-                        const td = document.createElement('td');
-                        let cellContent = cell ? cell.toString() : ""; let lowerCell = cellContent.toLowerCase();
-                        
-                        if (cellContent.includes('drive.google.com/file/d/')) {
-                            let idMatch = cellContent.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                            if(idMatch && idMatch[1]) cellContent = `<a href="${cellContent}" target="_blank"><img src="https://drive.google.com/uc?export=view&id=${idMatch[1]}" class="table-img" alt="Image"></a>`;
-                        } else if (lowerCell.match(/\.(png|jpg|jpeg|webp|gif)$/) && !lowerCell.startsWith('http')) {
-                            let appNameAppSheet = "MSBGeneralAffairs-310640119"; 
-                            let appSheetImgUrl = `https://www.appsheet.com/template/gettablefileurl?appName=${encodeURIComponent(appNameAppSheet)}&tableName=${encodeURIComponent(appsheetNameMap)}&fileName=${encodeURIComponent(cellContent)}`;
-                            cellContent = `<a href="${appSheetImgUrl}" target="_blank"><img src="${appSheetImgUrl}" class="table-img" alt="Image"></a>`;
-                        } else if (cellIndex === colStokSaatIni && isLowStock) {
-                            hasAlertRow = true; cellContent = `<span class="expiry-alert red" data-alert="true">⚠️ Sisa: ${cellContent}</span>`;
-                        } else if (expiryColumnIndices.includes(cellIndex)) {
-                            let check = parseAndCheckExpiry(cellContent);
-                            if (check.isAlert) { hasAlertRow = true; cellContent = check.text; } 
-                            else {
-                                let upperCell = cellContent.toUpperCase();
-                                if (upperCell === 'PENDING' || upperCell === 'PROSES') cellContent = `<span class="pill pill-pending">${cell}</span>`;
-                                else if (upperCell === 'SELESAI' || upperCell === 'READY' || upperCell === 'AKTIF' || upperCell === 'DIGUNAKAN') cellContent = `<span class="pill pill-selesai">${cell}</span>`;
-                            }
-                        } else {
-                            let upperCell = cellContent.toUpperCase();
-                            if (upperCell === 'PENDING' || upperCell === 'PROSES') cellContent = `<span class="pill pill-pending">${cell}</span>`;
-                            else if (upperCell === 'SELESAI' || upperCell === 'READY' || upperCell === 'AKTIF' || upperCell === 'DIGUNAKAN') cellContent = `<span class="pill pill-selesai">${cell}</span>`;
-                        }
-                        td.innerHTML = cellContent; tr.appendChild(td);
-                    });
-                    if (hasAlertRow) tr.setAttribute('data-row-alert', 'true');
-                    tbody.appendChild(tr);
-                });
-            }
-        }
+<script>
+/* =====================================================================
+   KONFIGURASI — TEMPEL URL WEB APP APPS SCRIPT ANDA DI SINI
+   ===================================================================== */
+const API_URL = "https://script.google.com/macros/s/AKfycbx3OGyqtEKEUQFIuw3xkRRLhxW7H8b8dvT6Mp8fDahlYCuFJqYz3EeEu4Ih4aMaVdlcWg/exec";
 
-        function applyQuickFilter(filterType, buttonEl) {
-            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
-            buttonEl.classList.add('active'); currentQuickFilter = filterType; filterTableData();
-        }
+/* =====================================================================
+   FOTO PROFIL KARYAWAN — SUMBER DATA APPSHEET
+   Data Master_Karyawan diimpor (IMPORTRANGE) dari spreadsheet App
+   AppSheet "MSBHumanResource". Nilai kolom Foto Profil dari AppSheet
+   berupa path relatif (bukan URL utuh), sehingga perlu dirakit jadi
+   URL gambar yang bisa ditampilkan lewat endpoint gettablefileurl.
+   ===================================================================== */
+const APPSHEET_APP_ID = 'MSBHumanResource-310640119';
+function appsheetFileUrl(tableName, fileName){
+  return 'https://www.appsheet.com/template/gettablefileurl?appName='+encodeURIComponent(APPSHEET_APP_ID)+'&tableName='+encodeURIComponent(tableName)+'&fileName='+encodeURIComponent(fileName);
+}
+function resolveImageUrl(sheet, value){
+  if(!value) return '';
+  const v = String(value).trim();
+  if(!v) return '';
+  if(/^https?:\/\//i.test(v) || /^data:image\//i.test(v)) return v; // sudah URL utuh (mis. upload lewat Apps Script/Drive)
+  return appsheetFileUrl(sheet, v); // path relatif dari AppSheet -> rakit jadi URL
+}
 
-        function filterTableData() {
-            if (currentTabId === 'overview') return;
-            let searchFilter = document.getElementById('globalSearch').value.toUpperCase();
-            let tr = document.getElementById('table-' + currentTabId).querySelector('tbody').getElementsByTagName("tr");
-            for (let i = 0; i < tr.length; i++) {
-                let matchesSearch = (tr[i].textContent || tr[i].innerText).toUpperCase().indexOf(searchFilter) > -1;
-                let matchesQuickFilter = false; let rowHtml = tr[i].innerHTML.toUpperCase();
-                if (currentQuickFilter === 'ALL') matchesQuickFilter = true;
-                else if (currentQuickFilter === 'PENDING') matchesQuickFilter = rowHtml.includes('PILL-PENDING');
-                else if (currentQuickFilter === 'SELESAI') matchesQuickFilter = rowHtml.includes('PILL-SELESAI');
-                else if (currentQuickFilter === 'ALERT') matchesQuickFilter = tr[i].getAttribute('data-row-alert') === 'true';
-                tr[i].style.display = (matchesSearch && matchesQuickFilter) ? "" : "none";
-            }
-        }
+/* =====================================================================
+   SKEMA TABEL (harus selaras dengan Code.gs)
+   t: text | longtext | number | price | date | datetime | time | enum | ref | image | file
+   ===================================================================== */
+const SCHEMA = {
+Master_Karyawan:[
+  {n:'ID Karyawan',l:'ID Karyawan',t:'text',rq:1},
+  {n:'Foto Profil',l:'Foto Profil',t:'image'},
+  {n:'Nama Lengkap',l:'Nama Lengkap',t:'text',rq:1},
+  {n:'Jabatan',l:'Jabatan',t:'text'},
+  {n:'Departemen',l:'Departemen',t:'ref',r:'Master_Departemen'},
+],
+Master_Departemen:[
+  {n:'ID_Departemen',l:'ID Departemen',t:'text',rq:1},
+  {n:'Nama_Departemen',l:'Nama Departemen',t:'text',rq:1},
+  {n:'Kepala_Departemen',l:'Kepala Departemen',t:'ref',r:'Master_Karyawan'},
+  {n:'Area_Proses',l:'Area / Proses',t:'text'},
+],
+Master_Lokasi:[
+  {n:'Kode_Lokasi',l:'Kode Lokasi',t:'text',rq:1},
+  {n:'Nama_Lokasi',l:'Nama Lokasi',t:'text',rq:1},
+  {n:'Gedung',l:'Gedung',t:'text'},
+  {n:'Lantai',l:'Lantai',t:'number'},
+  {n:'Keterangan',l:'Keterangan',t:'longtext'},
+],
+Master_Vendor_Supplier:[
+  {n:'Kode_Vendor',l:'Kode Vendor',t:'text',rq:1},
+  {n:'Nama_Vendor',l:'Nama Vendor',t:'text',rq:1},
+  {n:'Kategori_Vendor',l:'Kategori Vendor',t:'enum',o:['ATK','Perawatan','Sewa','General']},
+  {n:'Nama_PIC',l:'Nama PIC',t:'text'},
+  {n:'No_HP_PIC',l:'No. HP PIC',t:'text'},
+  {n:'Email',l:'Email',t:'text'},
+  {n:'Alamat',l:'Alamat',t:'longtext'},
+  {n:'NPWP',l:'NPWP',t:'text'},
+  {n:'Status_Vendor',l:'Status Vendor',t:'enum',o:['Aktif','Nonaktif']},
+],
+Master_Kategori_Aset:[
+  {n:'Kode_Kategori',l:'Kode Kategori',t:'text',rq:1},
+  {n:'Nama_Kategori',l:'Nama Kategori',t:'text',rq:1},
+  {n:'Umur_Ekonomis_Tahun',l:'Umur Ekonomis (Tahun)',t:'number'},
+],
+Data_Aset_Inventaris:[
+  {n:'Kode_Aset',l:'Kode Aset',t:'text',ro:1},
+  {n:'Nama_Aset',l:'Nama Aset',t:'text',rq:1},
+  {n:'Kategori_Aset',l:'Kategori Aset',t:'ref',r:'Master_Kategori_Aset'},
+  {n:'Merk_Model',l:'Merk / Model',t:'text'},
+  {n:'No_Seri',l:'No. Seri',t:'text'},
+  {n:'Tanggal_Perolehan',l:'Tanggal Perolehan',t:'date'},
+  {n:'Harga_Perolehan',l:'Harga Perolehan',t:'price'},
+  {n:'Lokasi',l:'Lokasi',t:'ref',r:'Master_Lokasi'},
+  {n:'PIC_Pemegang',l:'PIC Pemegang',t:'ref',r:'Master_Karyawan'},
+  {n:'Kondisi',l:'Kondisi',t:'enum',o:['Baik','Rusak Ringan','Rusak Berat']},
+  {n:'Status_Aset',l:'Status Aset',t:'enum',o:['Digunakan','Tersedia','Afkir/Scrap','Dipinjam']},
+  {n:'Foto_Aset',l:'Foto Aset',t:'image'},
+],
+Peminjaman_Aset:[
+  {n:'No_Peminjaman',l:'No. Peminjaman',t:'text',ro:1},
+  {n:'Kode_Aset',l:'Aset',t:'ref',r:'Data_Aset_Inventaris'},
+  {n:'Peminjam',l:'Peminjam',t:'ref',r:'Master_Karyawan'},
+  {n:'Tanggal_Pinjam',l:'Tanggal Pinjam',t:'date',d:'today'},
+  {n:'Rencana_Tanggal_Kembali',l:'Rencana Kembali',t:'date'},
+  {n:'Tanggal_Kembali_Aktual',l:'Tanggal Kembali Aktual',t:'date'},
+  {n:'Kondisi_Saat_Kembali',l:'Kondisi Saat Kembali',t:'enum',o:['Baik','Rusak']},
+  {n:'Status_Peminjaman',l:'Status',t:'enum',o:['Dipinjam','Dikembalikan','Terlambat']},
+],
+Perawatan_Aset:[
+  {n:'No_Perawatan',l:'No. Perawatan',t:'text',ro:1},
+  {n:'Kode_Aset',l:'Aset',t:'ref',r:'Data_Aset_Inventaris'},
+  {n:'Tanggal_Perawatan',l:'Tanggal Perawatan',t:'date',d:'today'},
+  {n:'Jenis_Perawatan',l:'Jenis Perawatan',t:'enum',o:['Preventif','Korektif']},
+  {n:'Vendor',l:'Vendor',t:'ref',r:'Master_Vendor_Supplier'},
+  {n:'Biaya',l:'Biaya',t:'price'},
+  {n:'Status',l:'Status',t:'enum',o:['Dijadwalkan','Proses','Selesai']},
+],
+Data_Kendaraan:[
+  {n:'No_Polisi',l:'No. Polisi',t:'text',rq:1},
+  {n:'Jenis_Kendaraan',l:'Jenis Kendaraan',t:'enum',o:['Mobil','Motor','Truck']},
+  {n:'Merk_Model',l:'Merk / Model',t:'text'},
+  {n:'Tahun',l:'Tahun',t:'number'},
+  {n:'No_Rangka',l:'No. Rangka',t:'text'},
+  {n:'No_Mesin',l:'No. Mesin',t:'text'},
+  {n:'Masa_Berlaku_STNK',l:'Masa Berlaku STNK',t:'date'},
+  {n:'Masa_Berlaku_Pajak',l:'Masa Berlaku Pajak',t:'date'},
+  {n:'Driver_Default',l:'Driver Default',t:'ref',r:'Master_Karyawan'},
+  {n:'Status_Kendaraan',l:'Status Kendaraan',t:'enum',o:['Tersedia','Dipakai','Servis','Rusak']},
+],
+Penggunaan_Kendaraan:[
+  {n:'No_Penggunaan',l:'No. Penggunaan',t:'text',ro:1},
+  {n:'No_Polisi',l:'Kendaraan',t:'ref',r:'Data_Kendaraan'},
+  {n:'Peminjam',l:'Peminjam',t:'ref',r:'Master_Karyawan'},
+  {n:'Driver',l:'Driver',t:'ref',r:'Master_Karyawan'},
+  {n:'Tujuan',l:'Tujuan',t:'longtext'},
+  {n:'Tanggal_Berangkat',l:'Tanggal/Jam Berangkat',t:'datetime'},
+  {n:'Tanggal_Kembali',l:'Tanggal/Jam Kembali',t:'datetime'},
+  {n:'KM_Awal',l:'KM Awal',t:'number'},
+  {n:'KM_Akhir',l:'KM Akhir',t:'number'},
+  {n:'Status',l:'Status',t:'enum',o:['Diajukan','Disetujui','Berjalan','Selesai','Ditolak']},
+],
+Service_Kendaraan:[
+  {n:'No_Service',l:'No. Service',t:'text',ro:1},
+  {n:'No_Polisi',l:'Kendaraan',t:'ref',r:'Data_Kendaraan'},
+  {n:'Tanggal_Service',l:'Tanggal Service',t:'date',d:'today'},
+  {n:'Jenis_Service',l:'Jenis Service',t:'enum',o:['Rutin','Perbaikan','Ganti Ban']},
+  {n:'Bengkel',l:'Bengkel',t:'ref',r:'Master_Vendor_Supplier'},
+  {n:'KM_Saat_Service',l:'KM Saat Service',t:'number'},
+  {n:'Biaya',l:'Biaya',t:'price'},
+  {n:'Rekomendasi_Service_Berikutnya',l:'Rekomendasi Service Berikutnya',t:'date'},
+],
+Master_Barang_ATK:[
+  {n:'Kode_Barang',l:'Kode Barang',t:'text',rq:1},
+  {n:'Nama_Barang',l:'Nama Barang',t:'text',rq:1},
+  {n:'Kategori',l:'Kategori',t:'enum',o:['ATK','Consumable','Rumah Tangga']},
+  {n:'Satuan',l:'Satuan',t:'enum',o:['Pcs','Box','Rim','Pack','Roll']},
+  {n:'Stok_Minimum',l:'Stok Minimum',t:'number'},
+],
+Stok_ATK:[
+  {n:'No_Transaksi',l:'No. Transaksi',t:'text',ro:1},
+  {n:'Kode_Barang',l:'Barang',t:'ref',r:'Master_Barang_ATK'},
+  {n:'Tanggal',l:'Tanggal',t:'date',d:'today'},
+  {n:'Jenis_Transaksi',l:'Jenis Transaksi',t:'enum',o:['Barang Masuk','Barang Keluar','Penyesuaian']},
+  {n:'Jumlah',l:'Jumlah',t:'number'},
+  {n:'Referensi',l:'Referensi',t:'text'},
+  {n:'Stok_Setelah_Transaksi',l:'Stok Setelah Transaksi',t:'number'},
+],
+Permintaan_ATK:[
+  {n:'No_Permintaan',l:'No. Permintaan',t:'text',ro:1},
+  {n:'Tanggal',l:'Tanggal',t:'date',d:'today'},
+  {n:'Pemohon',l:'Pemohon',t:'ref',r:'Master_Karyawan'},
+  {n:'Departemen',l:'Departemen',t:'ref',r:'Master_Departemen'},
+  {n:'Kode_Barang',l:'Barang',t:'ref',r:'Master_Barang_ATK'},
+  {n:'Jumlah_Diminta',l:'Jumlah Diminta',t:'number'},
+  {n:'Jumlah_Disetujui',l:'Jumlah Disetujui',t:'number'},
+  {n:'Status_Approval',l:'Status',t:'enum',o:['Menunggu','Disetujui','Ditolak','Diserahkan']},
+  {n:'Approver',l:'Approver',t:'ref',r:'Master_Karyawan'},
+],
+Permintaan_Pembelian_GA:[
+  {n:'No_PR',l:'No. PR',t:'text',ro:1},
+  {n:'Tanggal',l:'Tanggal',t:'date',d:'today'},
+  {n:'Pemohon',l:'Pemohon',t:'ref',r:'Master_Karyawan'},
+  {n:'Departemen',l:'Departemen',t:'ref',r:'Master_Departemen'},
+  {n:'Nama_Item',l:'Nama Item',t:'text',rq:1},
+  {n:'Jumlah',l:'Jumlah',t:'number'},
+  {n:'Estimasi_Biaya',l:'Estimasi Biaya',t:'price'},
+  {n:'Alasan_Kebutuhan',l:'Alasan Kebutuhan',t:'longtext'},
+  {n:'Status_Approval',l:'Status',t:'enum',o:['Menunggu','Disetujui','Ditolak']},
+],
+Purchase_Order_GA:[
+  {n:'No_PO',l:'No. PO',t:'text',ro:1},
+  {n:'Tanggal_PO',l:'Tanggal PO',t:'date',d:'today'},
+  {n:'No_PR_Referensi',l:'Referensi PR',t:'ref',r:'Permintaan_Pembelian_GA'},
+  {n:'Vendor',l:'Vendor',t:'ref',r:'Master_Vendor_Supplier'},
+  {n:'Nama_Item',l:'Nama Item',t:'text',rq:1},
+  {n:'Jumlah',l:'Jumlah',t:'number',calcTrigger:1},
+  {n:'Harga_Satuan',l:'Harga Satuan',t:'price',calcTrigger:1},
+  {n:'Total_Harga',l:'Total Harga',t:'price',ro:1,calc:'mul'},
+  {n:'Tanggal_Kirim_Estimasi',l:'Estimasi Kirim',t:'date'},
+  {n:'Status_PO',l:'Status PO',t:'enum',o:['Draft','Diproses','Selesai','Batal']},
+],
+Master_Fasilitas:[
+  {n:'Kode_Fasilitas',l:'Kode Fasilitas',t:'text',rq:1},
+  {n:'Nama_Fasilitas',l:'Nama Fasilitas',t:'text',rq:1},
+  {n:'Lokasi',l:'Lokasi',t:'ref',r:'Master_Lokasi'},
+  {n:'Kapasitas',l:'Kapasitas',t:'number'},
+  {n:'Status_Fasilitas',l:'Status',t:'enum',o:['Baik','Dalam Perbaikan','Rusak']},
+],
+Booking_Ruang_Meeting:[
+  {n:'No_Booking',l:'No. Booking',t:'text',ro:1},
+  {n:'Kode_Fasilitas',l:'Fasilitas',t:'ref',r:'Master_Fasilitas'},
+  {n:'Pemohon',l:'Pemohon',t:'ref',r:'Master_Karyawan'},
+  {n:'Departemen',l:'Departemen',t:'ref',r:'Master_Departemen'},
+  {n:'Tanggal',l:'Tanggal',t:'date',d:'today'},
+  {n:'Jam_Mulai',l:'Jam Mulai',t:'time'},
+  {n:'Jam_Selesai',l:'Jam Selesai',t:'time'},
+  {n:'Keperluan',l:'Keperluan',t:'text',rq:1},
+  {n:'Jumlah_Peserta',l:'Jumlah Peserta',t:'number'},
+  {n:'Status_Booking',l:'Status',t:'enum',o:['Menunggu','Disetujui','Dibatalkan','Selesai']},
+],
+Perawatan_Fasilitas:[
+  {n:'No_Perawatan',l:'No. Perawatan',t:'text',ro:1},
+  {n:'Kode_Fasilitas',l:'Fasilitas',t:'ref',r:'Master_Fasilitas'},
+  {n:'Tanggal',l:'Tanggal',t:'date',d:'today'},
+  {n:'Jenis_Perawatan',l:'Jenis Perawatan',t:'text'},
+  {n:'Vendor',l:'Vendor',t:'ref',r:'Master_Vendor_Supplier'},
+  {n:'Biaya',l:'Biaya',t:'price'},
+  {n:'Status',l:'Status',t:'enum',o:['Dijadwalkan','Proses','Selesai']},
+],
+Buku_Tamu:[
+  {n:'ID Kunjungan',l:'ID Kunjungan',t:'text',ro:1},
+  {n:'Waktu Masuk',l:'Waktu Masuk',t:'datetime',d:'now'},
+  {n:'Kategori Pengunjung',l:'Kategori Pengunjung',t:'enum',o:['Vendor / Supplier','Tamu VIP','Pelamar','Lainnya']},
+  {n:'Nama Pengunjung',l:'Nama Pengunjung',t:'text',rq:1},
+  {n:'Perusahaan/Instansi',l:'Perusahaan / Instansi',t:'text'},
+  {n:'Tujuan Kunjungan',l:'Tujuan Kunjungan',t:'text'},
+  {n:'Nama Karyawan',l:'Karyawan yang Ditemui',t:'ref',r:'Master_Karyawan'},
+  {n:'Departemen yang Dituju',l:'Departemen Dituju',t:'ref',r:'Master_Departemen'},
+  {n:'Foto Identitas',l:'Foto Identitas',t:'image'},
+  {n:'Status Kunjungan',l:'Status Kunjungan',t:'enum',o:['Di Dalam','Sudah Keluar']},
+  {n:'Waktu Keluar',l:'Waktu Keluar',t:'datetime'},
+],
+Surat_Masuk:[
+  {n:'No_Agenda',l:'No. Agenda',t:'text',ro:1},
+  {n:'Tanggal_Terima',l:'Tanggal Terima',t:'date',d:'today'},
+  {n:'Nomor_Surat',l:'Nomor Surat',t:'text',rq:1},
+  {n:'Perihal',l:'Perihal',t:'longtext'},
+  {n:'Pengirim',l:'Pengirim',t:'text'},
+  {n:'Ditujukan_Ke',l:'Ditujukan Ke',t:'ref',r:'Master_Departemen'},
+  {n:'Sifat_Surat',l:'Sifat Surat',t:'enum',o:['Biasa','Rahasia','Sangat Rahasia','Penting']},
+  {n:'Status_Tindak_Lanjut',l:'Status Tindak Lanjut',t:'enum',o:['Baru','Proses','Selesai']},
+  {n:'File_Surat',l:'File Surat',t:'file'},
+],
+Surat_Keluar:[
+  {n:'No_Agenda',l:'No. Agenda',t:'text',ro:1},
+  {n:'Tanggal_Kirim',l:'Tanggal Kirim',t:'date',d:'today'},
+  {n:'Nomor_Surat',l:'Nomor Surat',t:'text',rq:1},
+  {n:'Perihal',l:'Perihal',t:'longtext'},
+  {n:'Tujuan_Surat',l:'Tujuan Surat',t:'text'},
+  {n:'Dibuat_Oleh',l:'Dibuat Oleh',t:'ref',r:'Master_Karyawan'},
+  {n:'File_Surat',l:'File Surat',t:'file'},
+],
+Master_Perizinan_Legalitas:[
+  {n:'Kode_Izin',l:'Kode Izin',t:'text',rq:1},
+  {n:'Nama_Izin',l:'Nama Izin',t:'text',rq:1},
+  {n:'Nomor_Izin',l:'Nomor Izin',t:'text'},
+  {n:'Instansi_Penerbit',l:'Instansi Penerbit',t:'text'},
+  {n:'Tanggal_Terbit',l:'Tanggal Terbit',t:'date'},
+  {n:'Tanggal_Berakhir',l:'Tanggal Berakhir',t:'date'},
+  {n:'PIC',l:'PIC',t:'ref',r:'Master_Karyawan'},
+  {n:'Status_Izin',l:'Status',t:'enum',o:['Berlaku','Akan Kadaluarsa','Kadaluarsa']},
+  {n:'File_Dokumen',l:'File Dokumen',t:'file'},
+],
+Tagihan_Utilitas:[
+  {n:'No_Tagihan',l:'No. Tagihan',t:'text',ro:1},
+  {n:'Jenis_Utilitas',l:'Jenis Utilitas',t:'enum',o:['Listrik','Air','Internet','Telepon','Sewa Gedung']},
+  {n:'Periode',l:'Periode',t:'date'},
+  {n:'Lokasi',l:'Lokasi',t:'ref',r:'Master_Lokasi'},
+  {n:'Nominal_Tagihan',l:'Nominal Tagihan',t:'price'},
+  {n:'Tanggal_Jatuh_Tempo',l:'Jatuh Tempo',t:'date'},
+  {n:'Tanggal_Bayar',l:'Tanggal Bayar',t:'date'},
+  {n:'Status_Pembayaran',l:'Status',t:'enum',o:['Belum Dibayar','Lunas','Terlambat']},
+  {n:'Bukti_Bayar',l:'Bukti Bayar',t:'image'},
+],
+GA_Request_Tiket:[
+  {n:'No_Tiket',l:'No. Tiket',t:'text',ro:1},
+  {n:'Tanggal',l:'Tanggal',t:'datetime',d:'now'},
+  {n:'Pemohon',l:'Pemohon',t:'ref',r:'Master_Karyawan'},
+  {n:'Departemen',l:'Departemen',t:'ref',r:'Master_Departemen'},
+  {n:'Kategori',l:'Kategori',t:'enum',o:['Fasilitas','ATK','Kebersihan','Kendaraan','Lainnya']},
+  {n:'Deskripsi',l:'Deskripsi',t:'longtext',rq:1},
+  {n:'Prioritas',l:'Prioritas',t:'enum',o:['Rendah','Sedang','Tinggi','Urgent']},
+  {n:'PIC_GA',l:'PIC GA',t:'ref',r:'Master_Karyawan'},
+  {n:'Status',l:'Status',t:'enum',o:['Baru','Diproses','Selesai','Dibatalkan']},
+  {n:'Tanggal_Selesai',l:'Tanggal Selesai',t:'datetime'},
+  {n:'Rating_Kepuasan',l:'Rating Kepuasan (1-5)',t:'number'},
+],
+Kartu_Akses_ID_Card:[
+  {n:'No_Kartu',l:'No. Kartu',t:'text',ro:1},
+  {n:'Karyawan',l:'Karyawan',t:'ref',r:'Master_Karyawan'},
+  {n:'Tanggal_Terbit',l:'Tanggal Terbit',t:'date',d:'today'},
+  {n:'Jenis_Kartu',l:'Jenis Kartu',t:'enum',o:['ID Card','Kartu Akses','Kartu Parkir']},
+  {n:'Status_Kartu',l:'Status',t:'enum',o:['Aktif','Nonaktif','Hilang/Pengganti']},
+  {n:'Tanggal_Nonaktif',l:'Tanggal Nonaktif',t:'date'},
+],
+Permintaan_Seragam_APD:[
+  {n:'No_Permintaan',l:'No. Permintaan',t:'text',ro:1},
+  {n:'Karyawan',l:'Karyawan',t:'ref',r:'Master_Karyawan'},
+  {n:'Jenis',l:'Jenis',t:'enum',o:['Seragam','APD']},
+  {n:'Nama_Item',l:'Nama Item',t:'text',rq:1},
+  {n:'Ukuran',l:'Ukuran',t:'enum',o:['S','M','L','XL','XXL','38','39','40','41','42','43']},
+  {n:'Jumlah',l:'Jumlah',t:'number'},
+  {n:'Tanggal_Permintaan',l:'Tanggal Permintaan',t:'date',d:'today'},
+  {n:'Status',l:'Status',t:'enum',o:['Menunggu','Disetujui','Diserahkan','Ditolak']},
+],
+Perjalanan_Dinas:[
+  {n:'No_SPPD',l:'No. SPPD',t:'text',ro:1},
+  {n:'Karyawan',l:'Karyawan',t:'ref',r:'Master_Karyawan'},
+  {n:'Tujuan_Kota',l:'Tujuan Kota',t:'text',rq:1},
+  {n:'Keperluan',l:'Keperluan',t:'longtext'},
+  {n:'Tanggal_Berangkat',l:'Tanggal Berangkat',t:'date'},
+  {n:'Tanggal_Kembali',l:'Tanggal Kembali',t:'date'},
+  {n:'Transportasi',l:'Transportasi',t:'enum',o:['Pesawat','Kereta Api','Mobil Operasional','Travel']},
+  {n:'Estimasi_Biaya',l:'Estimasi Biaya',t:'price'},
+  {n:'Status_Approval',l:'Status',t:'enum',o:['Diajukan','Disetujui','Ditolak','Selesai']},
+],
+Asuransi_Aset:[
+  {n:'No_Polis',l:'No. Polis',t:'text',rq:1},
+  {n:'Jenis_Objek',l:'Jenis Objek',t:'enum',o:['Kendaraan','Gedung','Mesin/Aset']},
+  {n:'Kode_Objek',l:'Kode Objek',t:'text'},
+  {n:'Perusahaan_Asuransi',l:'Perusahaan Asuransi',t:'ref',r:'Master_Vendor_Supplier'},
+  {n:'Tanggal_Mulai',l:'Tanggal Mulai',t:'date'},
+  {n:'Tanggal_Berakhir',l:'Tanggal Berakhir',t:'date'},
+  {n:'Nilai_Premi',l:'Nilai Premi',t:'price'},
+  {n:'Status_Polis',l:'Status Polis',t:'enum',o:['Aktif','Kadaluarsa','Klaim Diproses']},
+],
+Login:[
+  {n:'Username',l:'Username',t:'text',rq:1},
+  {n:'Password',l:'Password',t:'password',rq:1},
+  {n:'Nama_Lengkap',l:'Nama Lengkap',t:'text',rq:1},
+  {n:'Role',l:'Role',t:'enum',o:['Admin','User']},
+],
+Pengaturan_Akses_Menu:[
+  {n:'Sheet',l:'Menu',t:'text',rq:1},
+  {n:'Akses',l:'Akses',t:'enum',o:['Bisa Diedit','Hanya Lihat']},
+],
+};
 
-        function getSafeCount(arr, isKeywordMatch = false, keywords = []) {
-            if (!arr || arr.length <= 1) return 0;
-            const dataOnly = arr.slice(1);
-            if (!isKeywordMatch) return dataOnly.length;
-            return dataOnly.filter(row => keywords.some(k => row.join(" ").toUpperCase().includes(k))).length;
-        }
+const TABLE_META = {
+  Master_Karyawan:{label:'Data Karyawan',icon:'fa-user',key:'ID Karyawan',lf:'Nama Lengkap',mod:'A',cols:['Foto Profil','ID Karyawan','Nama Lengkap','Jabatan','Departemen']},
+  Master_Departemen:{label:'Departemen',icon:'fa-sitemap',key:'ID_Departemen',lf:'Nama_Departemen',mod:'A',cols:['ID_Departemen','Nama_Departemen','Kepala_Departemen','Area_Proses']},
+  Master_Lokasi:{label:'Lokasi / Gedung',icon:'fa-location-dot',key:'Kode_Lokasi',lf:'Nama_Lokasi',mod:'A',cols:['Kode_Lokasi','Nama_Lokasi','Gedung','Lantai']},
+  Master_Vendor_Supplier:{label:'Vendor & Supplier',icon:'fa-handshake',key:'Kode_Vendor',lf:'Nama_Vendor',mod:'A',cols:['Kode_Vendor','Nama_Vendor','Kategori_Vendor','Nama_PIC','Status_Vendor']},
+  Master_Kategori_Aset:{label:'Kategori Aset',icon:'fa-tags',key:'Kode_Kategori',lf:'Nama_Kategori',mod:'A',cols:['Kode_Kategori','Nama_Kategori','Umur_Ekonomis_Tahun']},
 
-        const API_URL = "https://script.google.com/macros/s/AKfycbxFgFBqB-GN3vD1zxqr6TQVrIpNXrL1jAeEs-68Tk__mie9_HvowbZ0sCV08JkZ4tFzqA/exec";
+  Data_Aset_Inventaris:{label:'Aset & Inventaris',icon:'fa-desktop',key:'Kode_Aset',lf:'Nama_Aset',mod:'B',cols:['Kode_Aset','Nama_Aset','Kategori_Aset','Lokasi','PIC_Pemegang','Kondisi','Status_Aset']},
+  Peminjaman_Aset:{label:'Peminjaman Aset',icon:'fa-right-left',key:'No_Peminjaman',lf:'No_Peminjaman',mod:'B',cols:['No_Peminjaman','Kode_Aset','Peminjam','Tanggal_Pinjam','Rencana_Tanggal_Kembali','Status_Peminjaman']},
+  Perawatan_Aset:{label:'Perawatan Aset',icon:'fa-screwdriver-wrench',key:'No_Perawatan',lf:'No_Perawatan',mod:'B',cols:['No_Perawatan','Kode_Aset','Tanggal_Perawatan','Jenis_Perawatan','Vendor','Status']},
 
-        async function loadSheetData() {
-            let syncEl = document.getElementById('syncStatus');
-            syncEl.innerHTML = "<i class='fa-solid fa-circle-notch'></i> Menghubungkan ke Database...";
-            
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'GET',
-                    redirect: 'follow'
-                });
-                
-                if (!response.ok) throw new Error("Gagal terhubung ke server");
-                
-                const data = await response.json();
-                
-                renderSheet('table-aset', data.aset); 
-                renderSheet('table-permintaan', data.permintaan);
-                renderSheet('table-maintenance', data.maintenance); 
-                renderSheet('table-kendaraan', data.kendaraan);
-                renderSheet('table-pemakaian', data.pemakaian); 
-                renderSheet('table-master', data.master);
-                renderSheet('table-atk', data.atk); 
-                renderSheet('table-legalitas', data.legalitas);
-                
-                document.getElementById('count-aset').innerText = getSafeCount(data.aset);
-                document.getElementById('count-pending').innerText = getSafeCount(data.permintaan, true, ['PENDING', 'PROSES']);
-                document.getElementById('count-car').innerText = getSafeCount(data.kendaraan, true, ['READY', 'AKTIF', 'STANDBY']);
-                document.getElementById('count-expired').innerText = document.querySelectorAll('[data-alert="true"]').length;
-                
-                syncEl.innerHTML = "<i class='fa-solid fa-cloud-arrow-down' style='animation:none;'></i> Update Terakhir: " + new Date().toLocaleTimeString();
-            } catch (err) {
-                syncEl.innerHTML = `<i class='fa-solid fa-triangle-exclamation'></i> <span style="color:var(--danger-red);"><b>Koneksi Gagal:</b> Cek Link API</span>`;
-            }
-        }
+  Data_Kendaraan:{label:'Data Kendaraan',icon:'fa-car',key:'No_Polisi',lf:'Merk_Model',mod:'C',cols:['No_Polisi','Jenis_Kendaraan','Merk_Model','Masa_Berlaku_Pajak','Status_Kendaraan']},
+  Penggunaan_Kendaraan:{label:'Pemakaian Kendaraan',icon:'fa-road',key:'No_Penggunaan',lf:'No_Penggunaan',mod:'C',cols:['No_Penggunaan','No_Polisi','Peminjam','Tanggal_Berangkat','Status']},
+  Service_Kendaraan:{label:'Servis Kendaraan',icon:'fa-oil-can',key:'No_Service',lf:'No_Service',mod:'C',cols:['No_Service','No_Polisi','Tanggal_Service','Jenis_Service','Biaya']},
 
-        function exportToExcel() {
-            if (currentTabId === 'overview') {
-                alert("Silakan pilih menu data di sebelah kiri terlebih dahulu sebelum melakukan Export Excel.");
-                return;
-            }
-            
-            let table = document.getElementById('table-' + currentTabId);
-            if (!table) return;
+  Master_Barang_ATK:{label:'Master Barang ATK',icon:'fa-pen',key:'Kode_Barang',lf:'Nama_Barang',mod:'D',cols:['Kode_Barang','Nama_Barang','Kategori','Satuan','Stok_Minimum']},
+  Stok_ATK:{label:'Kartu Stok ATK',icon:'fa-warehouse',key:'No_Transaksi',lf:'No_Transaksi',mod:'D',cols:['No_Transaksi','Kode_Barang','Tanggal','Jenis_Transaksi','Jumlah','Stok_Setelah_Transaksi']},
+  Permintaan_ATK:{label:'Permintaan ATK',icon:'fa-cart-shopping',key:'No_Permintaan',lf:'No_Permintaan',mod:'D',cols:['No_Permintaan','Tanggal','Pemohon','Kode_Barang','Jumlah_Diminta','Status_Approval']},
+  Permintaan_Pembelian_GA:{label:'Purchase Request (PR)',icon:'fa-file-invoice',key:'No_PR',lf:'Nama_Item',mod:'D',cols:['No_PR','Tanggal','Pemohon','Nama_Item','Estimasi_Biaya','Status_Approval']},
+  Purchase_Order_GA:{label:'Purchase Order (PO)',icon:'fa-file-contract',key:'No_PO',lf:'No_PO',mod:'D',cols:['No_PO','Tanggal_PO','Vendor','Nama_Item','Total_Harga','Status_PO']},
 
-            let wb = XLSX.utils.book_new();
-            let ws_data = [];
+  Master_Fasilitas:{label:'Master Fasilitas',icon:'fa-door-open',key:'Kode_Fasilitas',lf:'Nama_Fasilitas',mod:'E',cols:['Kode_Fasilitas','Nama_Fasilitas','Lokasi','Kapasitas','Status_Fasilitas']},
+  Booking_Ruang_Meeting:{label:'Booking Ruang Meeting',icon:'fa-calendar-check',key:'No_Booking',lf:'Keperluan',mod:'E',cols:['No_Booking','Kode_Fasilitas','Pemohon','Tanggal','Jam_Mulai','Status_Booking']},
+  Perawatan_Fasilitas:{label:'Perawatan Fasilitas',icon:'fa-broom',key:'No_Perawatan',lf:'No_Perawatan',mod:'E',cols:['No_Perawatan','Kode_Fasilitas','Tanggal','Jenis_Perawatan','Status']},
 
-            let thead = table.querySelector('thead tr');
-            if (thead) {
-                let headers = [];
-                thead.querySelectorAll('th').forEach(th => headers.push(th.innerText));
-                ws_data.push(headers);
-            }
+  Buku_Tamu:{label:'Buku Tamu',icon:'fa-book-open',key:'ID Kunjungan',lf:'Nama Pengunjung',mod:'F',cols:['ID Kunjungan','Nama Pengunjung','Perusahaan/Instansi','Waktu Masuk','Status Kunjungan']},
+  Surat_Masuk:{label:'Surat Masuk',icon:'fa-envelope-open-text',key:'No_Agenda',lf:'Nomor_Surat',mod:'F',cols:['No_Agenda','Nomor_Surat','Perihal','Pengirim','Status_Tindak_Lanjut']},
+  Surat_Keluar:{label:'Surat Keluar',icon:'fa-paper-plane',key:'No_Agenda',lf:'Nomor_Surat',mod:'F',cols:['No_Agenda','Nomor_Surat','Perihal','Tujuan_Surat','Tanggal_Kirim']},
 
-            let tbody = table.querySelector('tbody');
-            if (tbody) {
-                tbody.querySelectorAll('tr').forEach(tr => {
-                    if (tr.style.display !== 'none') {
-                        let rowData = [];
-                        tr.querySelectorAll('td').forEach(td => {
-                            let cleanText = td.innerText.replace(/⚠️ Sisa: |🔔 |🚨 |⚠️ /g, '').trim();
-                            if (td.innerHTML.includes('<img')) {
-                                cleanText = "Terlampir (Gambar)";
-                            }
-                            rowData.push(cleanText);
-                        });
-                        ws_data.push(rowData);
-                    }
-                });
-            }
+  Master_Perizinan_Legalitas:{label:'Perizinan & Legalitas',icon:'fa-stamp',key:'Kode_Izin',lf:'Nama_Izin',mod:'G',cols:['Kode_Izin','Nama_Izin','Tanggal_Berakhir','Status_Izin']},
+  Tagihan_Utilitas:{label:'Tagihan Utilitas',icon:'fa-bolt',key:'No_Tagihan',lf:'No_Tagihan',mod:'G',cols:['No_Tagihan','Jenis_Utilitas','Nominal_Tagihan','Tanggal_Jatuh_Tempo','Status_Pembayaran']},
 
-            let ws = XLSX.utils.aoa_to_sheet(ws_data);
-            let wscols = ws_data[0].map(() => ({wch: 20}));
-            ws['!cols'] = wscols;
+  GA_Request_Tiket:{label:'Tiket Helpdesk GA',icon:'fa-ticket',key:'No_Tiket',lf:'Deskripsi',mod:'H',cols:['No_Tiket','Pemohon','Kategori','Deskripsi','Prioritas','Status']},
 
-            XLSX.utils.book_append_sheet(wb, ws, "Laporan " + document.getElementById('tabTitle').innerText);
-            
-            let title = document.getElementById('tabTitle').innerText;
-            let date = new Date().toISOString().split('T')[0];
-            XLSX.writeFile(wb, `Laporan_${title}_${date}.xlsx`);
-        }
+  Kartu_Akses_ID_Card:{label:'Kartu Akses / ID Card',icon:'fa-id-card',key:'No_Kartu',lf:'No_Kartu',mod:'I',cols:['No_Kartu','Karyawan','Jenis_Kartu','Status_Kartu']},
+  Permintaan_Seragam_APD:{label:'Seragam & APD',icon:'fa-shirt',key:'No_Permintaan',lf:'Nama_Item',mod:'I',cols:['No_Permintaan','Karyawan','Nama_Item','Ukuran','Jumlah','Status']},
 
-        window.onload = loadSheetData;
-        setInterval(loadSheetData, 60000); 
-    </script>
+  Perjalanan_Dinas:{label:'Perjalanan Dinas (SPPD)',icon:'fa-suitcase-rolling',key:'No_SPPD',lf:'Tujuan_Kota',mod:'J',cols:['No_SPPD','Karyawan','Tujuan_Kota','Tanggal_Berangkat','Status_Approval']},
+  Asuransi_Aset:{label:'Asuransi Aset',icon:'fa-shield-halved',key:'No_Polis',lf:'No_Polis',mod:'J',cols:['No_Polis','Jenis_Objek','Perusahaan_Asuransi','Tanggal_Berakhir','Status_Polis']},
 
-    <!-- ============================================================
-         SCRIPT: LOGIN + TRANSISI + APPSHEET VIEW
-    ============================================================= -->
-    <script>
-        const LOGIN_API_URL = "https://script.google.com/macros/s/AKfycbw_-GuTU2ecr25QolG6ZgDbf7jce-0kwOcnfGigpyYdLRXIlZprOCspKBnm9A1GhUfsbA/exec";
-        const APPSHEET_URL = "https://www.appsheet.com/start/7c0ace48-fb63-490b-aa28-d8f523d295b2";
-        const SESSION_KEY = "msb_ga_session";
+  Login:{label:'Manajemen User',icon:'fa-user-gear',key:'Username',lf:'Nama_Lengkap',mod:'K',cols:['Username','Nama_Lengkap','Role']},
+  Pengaturan_Akses_Menu:{label:'Pengaturan Akses Menu',icon:'fa-lock',key:'Sheet',lf:'Sheet',mod:'K',cols:['Sheet','Akses']},
+};
 
-        function getSession() {
-            const raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
-            if (!raw) return null;
-            try { return JSON.parse(raw); } catch (e) { return null; }
-        }
-        function saveSession(data, remember) {
-            const store = remember ? localStorage : sessionStorage;
-            store.setItem(SESSION_KEY, JSON.stringify(data));
-        }
-        function clearSession() {
-            sessionStorage.removeItem(SESSION_KEY);
-            localStorage.removeItem(SESSION_KEY);
-        }
+const MODULES = [
+  {id:'A',label:'Master Data',icon:'fa-database',c1:'#4F46E5',c2:'#818CF8'},
+  {id:'B',label:'Aset & Inventaris',icon:'fa-boxes-stacked',c1:'#D97706',c2:'#FBBF24'},
+  {id:'C',label:'Kendaraan Operasional',icon:'fa-truck',c1:'#0284C7',c2:'#38BDF8'},
+  {id:'D',label:'ATK & Pengadaan',icon:'fa-boxes-packing',c1:'#059669',c2:'#34D399'},
+  {id:'E',label:'Fasilitas & Meeting',icon:'fa-building',c1:'#7C3AED',c2:'#A78BFA'},
+  {id:'F',label:'Tamu & Dokumen',icon:'fa-address-card',c1:'#E11D48',c2:'#FB7185'},
+  {id:'G',label:'Perizinan & Utilitas',icon:'fa-file-shield',c1:'#0D9488',c2:'#2DD4BF'},
+  {id:'H',label:'Helpdesk GA',icon:'fa-headset',c1:'#EA580C',c2:'#FB923C'},
+  {id:'I',label:'Fasilitas Karyawan',icon:'fa-id-badge',c1:'#C026D3',c2:'#E879F9'},
+  {id:'J',label:'Perjalanan & Asuransi',icon:'fa-plane',c1:'#2563EB',c2:'#60A5FA'},
+  {id:'K',label:'Administrasi Sistem',icon:'fa-user-shield',c1:'#334155',c2:'#64748B'},
+];
 
-        function openLoginOverlay() {
-            const existing = getSession();
-            if (existing) { enterAppSheet(existing); return; }
-            document.getElementById('loginOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => document.getElementById('loginUsername').focus(), 350);
-        }
+/* =====================================================================
+   STATE
+   ===================================================================== */
+let DATA = {};
+let LOGGED_IN = null; // null = tamu (hanya lihat) | {Username,Nama_Lengkap,Role}
+let currentSheet = null;
+let viewState = { page:1, pageSize:8, search:'', filters:{}, filterOpen:false };
+let currentUploads = {};
+let editingKey = null;
 
-        function closeLoginOverlay() {
-            document.getElementById('loginOverlay').classList.remove('active');
-            document.body.style.overflow = '';
-            document.getElementById('loginForm').reset();
-            hideLoginError();
-        }
+/* =====================================================================
+   UTIL
+   ===================================================================== */
+function esc(v){ if(v===null||v===undefined) return ''; return String(v).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+function formatRupiah(n){ if(n===''||n===null||n===undefined||isNaN(Number(n))) return '-'; return 'Rp' + Number(n).toLocaleString('id-ID'); }
+const BULAN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+function formatDate(v){ if(!v) return '-'; const s=String(v); const parts=s.split('T')[0].split('-'); if(parts.length<3) return s; const y=parts[0],m=parseInt(parts[1],10),d=parseInt(parts[2],10); return d+' '+BULAN[m-1]+' '+y; }
+function formatDateTime(v){ if(!v) return '-'; const s=String(v); const [dp,tp]=s.split('T'); return formatDate(dp) + (tp?(', '+tp.slice(0,5)):''); }
+function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function nowStr(){ const d=new Date(); return todayStr()+'T'+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function initials(name){ if(!name) return '?'; const p=String(name).trim().split(/\s+/); return ((p[0]||'')[0]||'')+((p[1]||'')[0]||''); }
+function moduleOf(id){ return MODULES.find(function(m){return m.id===id;}); }
 
-        function showLoginError(msg) {
-            const err = document.getElementById('loginError');
-            err.querySelector('span').innerText = msg;
-            err.classList.add('show');
-            const card = document.getElementById('loginCard');
-            card.classList.remove('shake');
-            void card.offsetWidth; 
-            card.classList.add('shake');
-        }
-        function hideLoginError() {
-            document.getElementById('loginError').classList.remove('show');
-        }
+/* =====================================================================
+   HAK AKSES — LOGIN & PENGATURAN MENU
+   ===================================================================== */
+function isAdmin(){ return !!(LOGGED_IN && LOGGED_IN.Role === 'Admin'); }
+function menuAccessSetting(sheet){
+  const row = (DATA.Pengaturan_Akses_Menu||[]).find(function(r){ return r.Sheet===sheet; });
+  return row ? row.Akses : 'Bisa Diedit'; // default: bisa diedit kalau belum diatur
+}
+function canEdit(sheet){
+  if(!sheet) return false;
+  if(!LOGGED_IN) return false; // tamu = selalu hanya lihat
+  if(isAdmin()) return true; // admin selalu bisa edit semua menu
+  return menuAccessSetting(sheet) !== 'Hanya Lihat';
+}
+/* [FIX] Untuk mode Tamu/Hanya Lihat (belum login), kolom "ID Karyawan"
+   disembunyikan dari tabel Data Karyawan (serta print & export-nya).
+   Kolom lain (Foto, Nama, Jabatan, Departemen) tetap tampil. */
+function visibleColsFor(sheet){
+  const meta = TABLE_META[sheet];
+  if(sheet==='Master_Karyawan' && !LOGGED_IN){
+    return meta.cols.filter(function(c){ return c!=='ID Karyawan'; });
+  }
+  return meta.cols;
+}
+function findKaryawanIdByName(name){
+  if(!name) return '';
+  const n = String(name).trim().toLowerCase();
+  const rec = (DATA.Master_Karyawan||[]).find(function(k){ return String(k['Nama Lengkap']||'').trim().toLowerCase()===n; });
+  return rec ? rec['ID Karyawan'] : '';
+}
 
-        function togglePasswordVisibility() {
-            const input = document.getElementById('loginPassword');
-            const icon = document.getElementById('togglePassIcon');
-            if (input.type === 'password') { input.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash'); }
-            else { input.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
-        }
+/* =====================================================================
+   JAM & TANGGAL BERJALAN
+   ===================================================================== */
+const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BULAN_FULL = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function fullDateTimeStr(){
+  const d = new Date();
+  const jam = String(d.getHours()).padStart(2,'0');
+  const menit = String(d.getMinutes()).padStart(2,'0');
+  const detik = String(d.getSeconds()).padStart(2,'0');
+  return HARI[d.getDay()]+', '+d.getDate()+' '+BULAN_FULL[d.getMonth()]+' '+d.getFullYear()+' '+jam+':'+menit+':'+detik;
+}
+function updateClock(){
+  const d = new Date();
+  const dateEl = document.getElementById('tcDate');
+  const timeEl = document.getElementById('tcTime');
+  if(dateEl) dateEl.textContent = HARI[d.getDay()]+', '+d.getDate()+' '+BULAN_FULL[d.getMonth()]+' '+d.getFullYear();
+  if(timeEl) timeEl.textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
+}
 
-        async function handleLoginSubmit(event) {
-            event.preventDefault();
-            hideLoginError();
+function toast(msg, type){
+  const wrap=document.getElementById('toastWrap');
+  const el=document.createElement('div');
+  el.className='toast '+(type==='error'?'t-err':'t-ok');
+  el.innerHTML='<i class="fa-solid '+(type==='error'?'fa-circle-exclamation':'fa-circle-check')+'"></i><span>'+esc(msg)+'</span>';
+  wrap.appendChild(el);
+  setTimeout(function(){ el.style.opacity='0'; el.style.transform='translateY(-8px)'; el.style.transition='all .2s'; setTimeout(function(){ el.remove(); },220); }, 3200);
+}
 
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const remember = document.getElementById('rememberMe').checked;
-            const btn = document.getElementById('btnLoginSubmit');
+function statusClass(v){
+  const s=String(v||'').toLowerCase();
+  const green=['baik','aktif','disetujui','selesai','lunas','tersedia','berlaku','diserahkan','sudah keluar'];
+  const red=['rusak','ditolak','terlambat','kadaluarsa','nonaktif','batal','dibatalkan','afkir','urgent','tinggi','hilang'];
+  const amber=['menunggu','proses','diproses','diajukan','dijadwalkan','akan kadaluarsa','dipinjam','dipakai','berjalan','sedang','di dalam','belum dibayar','baru','servis'];
+  for(let i=0;i<green.length;i++){ if(s.indexOf(green[i])>-1) return 'p-green'; }
+  for(let i=0;i<red.length;i++){ if(s.indexOf(red[i])>-1) return 'p-red'; }
+  for(let i=0;i<amber.length;i++){ if(s.indexOf(amber[i])>-1) return 'p-amber'; }
+  return 'p-gray';
+}
 
-            if (!username || !password) { showLoginError('Username dan password wajib diisi'); return; }
+/* =====================================================================
+   API
+   ===================================================================== */
+function apiGet(action, params){
+  params = params || {};
+  const qs = Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
+  const url = API_URL + '?action=' + encodeURIComponent(action) + (qs?('&'+qs):'');
+  return fetch(url, { method:'GET' }).then(function(r){ return r.json(); });
+}
+function apiPost(payload){
+  return fetch(API_URL, {
+    method:'POST',
+    headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).then(function(r){ return r.json(); });
+}
 
-            if (!LOGIN_API_URL || LOGIN_API_URL.includes('PASTE_URL')) {
-                showLoginError('URL Apps Script login belum diatur. Hubungi admin sistem.');
-                return;
-            }
+async function loadAll(){
+  if(!API_URL || API_URL.indexOf('PASTE_URL') > -1){
+    toast('URL Apps Script belum diatur. Edit variabel API_URL di file HTML ini.', 'error');
+    DATA = {}; Object.keys(SCHEMA).forEach(function(k){ DATA[k]=[]; });
+    return;
+  }
+  try{
+    const res = await apiGet('all');
+    if(!res.success) throw new Error(res.error||'Gagal memuat data');
+    DATA = res.data;
+    if(res.warning) toast(res.warning, 'error');
+  }catch(err){
+    toast('Gagal terhubung ke server: '+err.message, 'error');
+    Object.keys(SCHEMA).forEach(function(k){ if(!DATA[k]) DATA[k]=[]; });
+  }
+}
 
-            btn.classList.add('loading');
-            btn.disabled = true;
+async function manualRefresh(){
+  toast('Memuat ulang data...');
+  await loadAll();
+  if(currentSheet) renderTableView(currentSheet); else renderDashboard();
+}
 
-            try {
-                const url = `${LOGIN_API_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-                const res = await fetch(url, { method: 'GET', redirect: 'follow' });
-                if (!res.ok) throw new Error('Gagal terhubung ke server login');
-                const data = await res.json();
+/* =====================================================================
+   REF HELPERS
+   ===================================================================== */
+function refRecord(sheet, keyVal){
+  if(!DATA[sheet]) return null;
+  const meta = TABLE_META[sheet];
+  return DATA[sheet].find(function(r){ return String(r[meta.key]) === String(keyVal); }) || null;
+}
+function refLabel(sheet, keyVal){
+  if(keyVal===''||keyVal===undefined||keyVal===null) return '-';
+  const rec = refRecord(sheet, keyVal);
+  const meta = TABLE_META[sheet];
+  if(!rec) return keyVal;
+  return rec[meta.lf] || keyVal;
+}
+function refOptionsHtml(sheet, selectedVal){
+  const meta = TABLE_META[sheet];
+  const rows = DATA[sheet] || [];
+  let html = '<option value="">— pilih '+esc(meta.label)+' —</option>';
+  rows.forEach(function(r){
+    const val = r[meta.key];
+    const lbl = r[meta.lf] || val;
+    const sel = String(val)===String(selectedVal) ? 'selected' : '';
+    html += '<option value="'+esc(val)+'" '+sel+'>'+esc(lbl)+' ('+esc(val)+')</option>';
+  });
+  return html;
+}
 
-                if (data.status === 'success') {
-                    const sessionData = { username: data.username || username, nama: data.nama || '', role: data.role || '' };
-                    saveSession(sessionData, remember);
-                    document.getElementById('loginOverlay').classList.remove('active');
-                    document.body.style.overflow = '';
-                    document.getElementById('loginForm').reset();
-                    enterAppSheet(sessionData);
-                } else {
-                    showLoginError(data.message || 'Username atau password salah');
-                }
-            } catch (err) {
-                showLoginError('Tidak dapat terhubung ke server login. Cek kembali URL Apps Script / koneksi internet.');
-            } finally {
-                btn.classList.remove('loading');
-                btn.disabled = false;
-            }
-        }
+/* =====================================================================
+   SIDEBAR
+   ===================================================================== */
+function renderSidebar(){
+  const nav = document.getElementById('navScroll');
+  let html = '<div class="nav-dash '+(!currentSheet?'active':'')+'" onclick="showDashboard()"><img src="icon-512.png" alt="" class="nav-dash-icon"> Dashboard</div>';
+  MODULES.forEach(function(mod){
+    if(mod.id==='K' && !isAdmin()) return; // menu administrasi sistem: khusus Admin
+    const tables = Object.keys(TABLE_META).filter(function(k){ return TABLE_META[k].mod===mod.id; });
+    html += '<div class="nav-group open" id="grp-'+mod.id+'">';
+    html += '<div class="nav-group-head" onclick="toggleGroup(\''+mod.id+'\')">';
+    html += '<div class="mini-badge" style="--c1:'+mod.c1+';--c2:'+mod.c2+';"><i class="fa-solid '+mod.icon+'"></i></div>';
+    html += '<div class="nav-group-title">'+esc(mod.label)+'</div>';
+    html += '<i class="fa-solid fa-chevron-right chev"></i></div>';
+    html += '<div class="nav-items">';
+    tables.forEach(function(t){
+      const meta = TABLE_META[t];
+      html += '<div class="nav-item '+(currentSheet===t?'active':'')+'" style="--c1:'+mod.c1+';" onclick="navigateTo(\''+t+'\')"><i class="fa-solid '+meta.icon+'"></i>'+esc(meta.label)+'</div>';
+    });
+    html += '</div></div>';
+  });
+  nav.innerHTML = html;
+}
+function toggleGroup(id){ document.getElementById('grp-'+id).classList.toggle('open'); }
 
-        function enterAppSheet(sessionData) {
-            const transition = document.getElementById('transitionScreen');
-            document.getElementById('transitionText').innerText = 'Menghubungkan ke MSB GA System...';
-            transition.classList.add('active');
+/* =====================================================================
+   NAVIGASI
+   ===================================================================== */
+function navigateTo(sheet){
+  if((sheet==='Login' || sheet==='Pengaturan_Akses_Menu') && !isAdmin()){
+    toast('Menu ini khusus untuk Admin', 'error');
+    return;
+  }
+  currentSheet = sheet;
+  viewState = { page:1, pageSize:8, search:'', filters:{}, filterOpen:false };
+  document.getElementById('searchInput').value='';
+  renderSidebar();
+  if(sheet==='Pengaturan_Akses_Menu') renderAccessSettingsPage();
+  else renderTableView(sheet);
+  if(window.innerWidth<=880) document.getElementById('sidebar').classList.remove('open');
+}
+function showDashboard(){
+  currentSheet = null;
+  renderSidebar();
+  renderDashboard();
+  if(window.innerWidth<=880) document.getElementById('sidebar').classList.remove('open');
+}
 
-            setTimeout(() => {
-                const iframe = document.getElementById('appsheetIframe');
-                if (!iframe.src || iframe.src.endsWith('about:blank')) {
-                    iframe.src = APPSHEET_URL;
-                }
-                const label = document.getElementById('appsheetUserLabel');
-                if (label) {
-                    const displayName = (sessionData && (sessionData.nama || sessionData.username)) || '';
-                    label.innerText = displayName ? ('Login sebagai ' + displayName) : '';
-                }
-                document.getElementById('appsheetView').classList.add('active');
+/* =====================================================================
+   DASHBOARD
+   ===================================================================== */
+function within(dateStr, days){
+  if(!dateStr) return false;
+  const target = new Date(dateStr);
+  const now = new Date();
+  const diff = (target - now) / (1000*3600*24);
+  return diff >= -0.01 && diff <= days;
+}
 
-                setTimeout(() => transition.classList.remove('active'), 400);
-            }, 900);
-        }
+function renderDashboard(){
+  document.getElementById('crumbEyebrow').textContent = 'Beranda';
+  document.getElementById('crumbTitle').textContent = 'Dashboard';
+  document.getElementById('searchBox').style.display = 'none';
+  document.getElementById('addBtn').style.display = 'none';
 
-        function backToDashboard() {
-            const transition = document.getElementById('transitionScreen');
-            document.getElementById('transitionText').innerText = 'Kembali ke Dashboard...';
-            transition.classList.add('active');
+  const d = DATA;
+  const g = function(s){ return d[s] || []; };
+  const cnt = {
+    karyawan: g('Master_Karyawan').length,
+    asetTotal: g('Data_Aset_Inventaris').length,
+    asetDipinjam: g('Data_Aset_Inventaris').filter(function(r){return r.Status_Aset==='Dipinjam';}).length,
+    kendaraanTersedia: g('Data_Kendaraan').filter(function(r){return r.Status_Kendaraan==='Tersedia';}).length,
+    kendaraanTotal: g('Data_Kendaraan').length,
+    pajakSegera: g('Data_Kendaraan').filter(function(r){return within(r.Masa_Berlaku_Pajak,30);}).length,
+    prPending: g('Permintaan_Pembelian_GA').filter(function(r){return r.Status_Approval==='Menunggu';}).length,
+    poDiproses: g('Purchase_Order_GA').filter(function(r){return r.Status_PO==='Diproses';}).length,
+    tamuDiDalam: g('Buku_Tamu').filter(function(r){return r['Status Kunjungan']==='Di Dalam';}).length,
+    suratBaru: g('Surat_Masuk').filter(function(r){return r.Status_Tindak_Lanjut==='Baru';}).length,
+    izinSegera: g('Master_Perizinan_Legalitas').filter(function(r){return r.Status_Izin==='Akan Kadaluarsa' || within(r.Tanggal_Berakhir,60);}).length,
+    tagihanBelumBayar: g('Tagihan_Utilitas').filter(function(r){return r.Status_Pembayaran!=='Lunas';}).length,
+    tiketTerbuka: g('GA_Request_Tiket').filter(function(r){return r.Status==='Baru'||r.Status==='Diproses';}).length,
+    sppdDiajukan: g('Perjalanan_Dinas').filter(function(r){return r.Status_Approval==='Diajukan';}).length,
+  };
 
-            setTimeout(() => {
-                document.getElementById('appsheetView').classList.remove('active');
-                setTimeout(() => transition.classList.remove('active'), 400);
-            }, 500);
-        }
+  const hour = new Date().getHours();
+  const greet = hour<11?'Selamat pagi':hour<15?'Selamat siang':hour<18?'Selamat sore':'Selamat malam';
+  const userName = LOGGED_IN ? LOGGED_IN.Nama_Lengkap : null;
 
-        function logoutSystem() {
-            clearSession();
-            backToDashboard();
-        }
+  const kpis = [
+    {label:'Total Karyawan', num:cnt.karyawan, icon:'fa-users', c1:'#4F46E5',c2:'#818CF8', go:'Master_Karyawan'},
+    {label:'Aset Sedang Dipinjam', num:cnt.asetDipinjam+' / '+cnt.asetTotal, icon:'fa-boxes-stacked', c1:'#D97706',c2:'#FBBF24', go:'Data_Aset_Inventaris'},
+    {label:'Kendaraan Tersedia', num:cnt.kendaraanTersedia+' / '+cnt.kendaraanTotal, icon:'fa-car', c1:'#0284C7',c2:'#38BDF8', go:'Data_Kendaraan'},
+    {label:'Pajak Kendaraan ≤30 Hari', num:cnt.pajakSegera, icon:'fa-triangle-exclamation', c1:'#EA580C',c2:'#FB923C', go:'Data_Kendaraan'},
+    {label:'PR Menunggu Approval', num:cnt.prPending, icon:'fa-file-invoice', c1:'#059669',c2:'#34D399', go:'Permintaan_Pembelian_GA'},
+    {label:'PO Sedang Diproses', num:cnt.poDiproses, icon:'fa-file-contract', c1:'#059669',c2:'#34D399', go:'Purchase_Order_GA'},
+    {label:'Tamu Sedang di Dalam', num:cnt.tamuDiDalam, icon:'fa-address-card', c1:'#E11D48',c2:'#FB7185', go:'Buku_Tamu'},
+    {label:'Surat Masuk Baru', num:cnt.suratBaru, icon:'fa-envelope-open-text', c1:'#E11D48',c2:'#FB7185', go:'Surat_Masuk'},
+    {label:'Izin Akan Kadaluarsa', num:cnt.izinSegera, icon:'fa-stamp', c1:'#0D9488',c2:'#2DD4BF', go:'Master_Perizinan_Legalitas'},
+    {label:'Tagihan Belum Dibayar', num:cnt.tagihanBelumBayar, icon:'fa-bolt', c1:'#0D9488',c2:'#2DD4BF', go:'Tagihan_Utilitas'},
+    {label:'Tiket Helpdesk Terbuka', num:cnt.tiketTerbuka, icon:'fa-ticket', c1:'#EA580C',c2:'#FB923C', go:'GA_Request_Tiket'},
+    {label:'SPPD Diajukan', num:cnt.sppdDiajukan, icon:'fa-suitcase-rolling', c1:'#2563EB',c2:'#60A5FA', go:'Perjalanan_Dinas'},
+  ];
 
-        function openAppsheetNewTab() {
-            window.open(APPSHEET_URL, '_blank', 'noopener');
-        }
+  let html = '<div class="hello"><h1>'+greet+(userName?', '+esc(userName.split(' ')[0]):'')+' 👋</h1><p>Ringkasan operasional General Affairs hari ini.</p></div>';
+  html += '<div class="kpi-grid">';
+  kpis.forEach(function(k){
+    html += '<div class="kpi-card" onclick="navigateTo(\''+k.go+'\')">';
+    html += '<div class="kpi-icon" style="--c1:'+k.c1+';--c2:'+k.c2+';"><i class="fa-solid '+k.icon+'"></i></div>';
+    html += '<div><div class="kpi-num">'+esc(k.num)+'</div><div class="kpi-label">'+esc(k.label)+'</div></div>';
+    html += '</div>';
+  });
+  html += '</div>';
 
-        document.addEventListener('keydown', function (e) {
-            if (e.key !== 'Escape') return;
-            if (document.getElementById('loginOverlay').classList.contains('active')) closeLoginOverlay();
-            else if (document.getElementById('appsheetView').classList.contains('active')) backToDashboard();
+  html += '<div class="panel-grid">';
+  html += '<div class="panel"><h3>Perlu Perhatian</h3><div id="alertList"></div></div>';
+  html += '<div class="panel"><h3>Status Tiket Helpdesk GA</h3><canvas id="chartTiket" height="190"></canvas></div>';
+  html += '</div>';
+
+  document.getElementById('content').innerHTML = html;
+
+  const alerts = [];
+  g('Data_Kendaraan').filter(function(r){return within(r.Masa_Berlaku_Pajak,30);}).forEach(function(r){
+    alerts.push({dot:'#EA580C', title:'Pajak '+r.No_Polisi+' akan jatuh tempo', meta:formatDate(r.Masa_Berlaku_Pajak)});
+  });
+  g('Master_Perizinan_Legalitas').filter(function(r){return within(r.Tanggal_Berakhir,60);}).forEach(function(r){
+    alerts.push({dot:'#0D9488', title:'Izin "'+r.Nama_Izin+'" akan berakhir', meta:formatDate(r.Tanggal_Berakhir)});
+  });
+  g('Tagihan_Utilitas').filter(function(r){return r.Status_Pembayaran==='Belum Dibayar' && within(r.Tanggal_Jatuh_Tempo,7);}).forEach(function(r){
+    alerts.push({dot:'#E11D48', title:'Tagihan '+r.Jenis_Utilitas+' jatuh tempo', meta:formatDate(r.Tanggal_Jatuh_Tempo)});
+  });
+  g('Master_Barang_ATK').forEach(function(item){
+    const trx = g('Stok_ATK').filter(function(s){return s.Kode_Barang===item.Kode_Barang;});
+    if(trx.length){
+      const last = trx[trx.length-1];
+      if(Number(last.Stok_Setelah_Transaksi) <= Number(item.Stok_Minimum)){
+        alerts.push({dot:'#D97706', title:'Stok "'+item.Nama_Barang+'" menipis', meta:'Sisa '+last.Stok_Setelah_Transaksi});
+      }
+    }
+  });
+
+  const alertBox = document.getElementById('alertList');
+  if(alerts.length===0){
+    alertBox.innerHTML = '<div class="empty-note">Tidak ada hal mendesak saat ini. Semua terkendali ✨</div>';
+  }else{
+    alertBox.innerHTML = alerts.slice(0,8).map(function(a){
+      return '<div class="alert-row"><span class="alert-dot" style="background:'+a.dot+';"></span><span class="a-title">'+esc(a.title)+'</span><span class="a-meta">'+esc(a.meta)+'</span></div>';
+    }).join('');
+  }
+
+  try{
+    const ctx = document.getElementById('chartTiket');
+    if(ctx && window.Chart){
+      const statuses = ['Baru','Diproses','Selesai','Dibatalkan'];
+      const colors = ['#EA580C','#D97706','#0E9F6E','#E11D48'];
+      const counts = statuses.map(function(s){ return g('GA_Request_Tiket').filter(function(r){return r.Status===s;}).length; });
+      new Chart(ctx, {
+        type:'doughnut',
+        data:{ labels:statuses, datasets:[{ data:counts, backgroundColor:colors, borderWidth:0 }] },
+        options:{ plugins:{ legend:{ position:'bottom', labels:{ font:{ family:'Plus Jakarta Sans', size:11 }, boxWidth:10, padding:14 } } }, cutout:'62%' }
+      });
+    }
+  }catch(e){ /* chart opsional, abaikan jika gagal load CDN */ }
+}
+
+/* =====================================================================
+   TABLE VIEW
+   ===================================================================== */
+function cellHtml(sheet, field, value, row){
+  if(field.t==='password') return value ? '••••••••' : '<span class="cell-muted">-</span>';
+  if(field.t==='ref') return esc(refLabel(field.r, value));
+  if(field.t==='enum') return value ? '<span class="pill '+statusClass(value)+'"><span class="dot"></span>'+esc(value)+'</span>' : '-';
+  if(field.t==='price') return formatRupiah(value);
+  if(field.t==='date') return formatDate(value);
+  if(field.t==='datetime') return formatDateTime(value);
+  if(field.t==='image'){
+    const src = resolveImageUrl(sheet, value);
+    const isProfile = (sheet==='Master_Karyawan' && field.n==='Foto Profil');
+    if(isProfile){
+      const label = initials(row ? row['Nama Lengkap'] : '');
+      if(src) return '<img class="avatar-photo" src="'+esc(src)+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';"><span class="avatar-fallback" style="display:none;">'+esc(label)+'</span>';
+      return '<span class="avatar-fallback">'+esc(label)+'</span>';
+    }
+    if(src) return '<img class="thumb" src="'+esc(src)+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';"><span class="thumb-placeholder" style="display:none;"><i class="fa-solid fa-image"></i></span>';
+    return '<span class="thumb-placeholder"><i class="fa-solid fa-image"></i></span>';
+  }
+  if(field.t==='file'){
+    if(value) return '<a class="file-chip" href="'+esc(value)+'" target="_blank"><i class="fa-solid fa-paperclip"></i> Lihat</a>';
+    return '<span class="cell-muted">-</span>';
+  }
+  if(field.t==='longtext') return '<span title="'+esc(value)+'">'+esc(String(value||'-').slice(0,46))+(String(value||'').length>46?'…':'')+'</span>';
+  return value===''||value===undefined||value===null ? '<span class="cell-muted">-</span>' : esc(value);
+}
+
+function searchableText(sheet, row){
+  const meta = TABLE_META[sheet];
+  return meta.cols.map(function(c){
+    const field = SCHEMA[sheet].find(function(f){return f.n===c;});
+    if(field && (field.t==='image' || field.t==='file' || field.t==='password')) return '';
+    let v = row[c];
+    if(field && field.t==='ref') v = refLabel(field.r, v);
+    return String(v||'');
+  }).join(' ').toLowerCase();
+}
+
+/* =====================================================================
+   FILTER TABEL
+   ===================================================================== */
+function getFilterableFields(sheet){
+  const meta = TABLE_META[sheet];
+  return SCHEMA[sheet].filter(function(f){
+    return meta.cols.indexOf(f.n) > -1 && (f.t==='enum' || f.t==='ref');
+  });
+}
+function applyFilters(sheet, rows){
+  const filters = viewState.filters || {};
+  const keys = Object.keys(filters).filter(function(k){ return filters[k]!==''&&filters[k]!==undefined&&filters[k]!==null; });
+  if(!keys.length) return rows;
+  return rows.filter(function(r){
+    return keys.every(function(k){ return String(r[k]||'')===String(filters[k]); });
+  });
+}
+function getVisibleRows(sheet){
+  let rows = (DATA[sheet] || []).slice().reverse();
+  if(viewState.search){
+    const q = viewState.search.toLowerCase();
+    rows = rows.filter(function(r){ return searchableText(sheet, r).indexOf(q) > -1; });
+  }
+  rows = applyFilters(sheet, rows);
+  return rows;
+}
+function renderFilterBarHtml(sheet){
+  const fields = getFilterableFields(sheet);
+  if(!fields.length) return '';
+  let html = '<div class="filter-bar'+(viewState.filterOpen?' show':'')+'" id="filterBar">';
+  fields.forEach(function(f){
+    const current = viewState.filters[f.n] || '';
+    let opts = '<option value="">Semua</option>';
+    if(f.t==='enum'){
+      (f.o||[]).forEach(function(o){ opts += '<option value="'+esc(o)+'" '+(current===o?'selected':'')+'>'+esc(o)+'</option>'; });
+    }else if(f.t==='ref'){
+      const seen = {};
+      (DATA[sheet]||[]).forEach(function(r){
+        const v = r[f.n];
+        if(v!==''&&v!==undefined&&v!==null) seen[v]=true;
+      });
+      Object.keys(seen).forEach(function(v){
+        opts += '<option value="'+esc(v)+'" '+(current===v?'selected':'')+'>'+esc(refLabel(f.r, v))+'</option>';
+      });
+    }
+    html += '<div class="filter-field"><label>'+esc(f.l)+'</label><select onchange="setFilterValue(\''+f.n+'\', this.value)">'+opts+'</select></div>';
+  });
+  html += '<button class="btn btn-ghost btn-sm filter-reset" onclick="resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset</button>';
+  html += '</div>';
+  return html;
+}
+function toggleFilterPanel(){
+  viewState.filterOpen = !viewState.filterOpen;
+  renderTableView(currentSheet);
+}
+function setFilterValue(field, value){
+  if(value) viewState.filters[field] = value; else delete viewState.filters[field];
+  viewState.page = 1;
+  renderTableView(currentSheet);
+}
+function resetFilters(){
+  viewState.filters = {};
+  viewState.page = 1;
+  renderTableView(currentSheet);
+}
+
+/* =====================================================================
+   PRINT & EXPORT EXCEL
+   ===================================================================== */
+function buildExportRows(sheet){
+  const meta = TABLE_META[sheet];
+  const cols = visibleColsFor(sheet);
+  const rows = getVisibleRows(sheet);
+  const headers = cols.map(function(c){ const f=SCHEMA[sheet].find(function(x){return x.n===c;}); return f?f.l:c; });
+  const body = rows.map(function(row){
+    return cols.map(function(c){
+      const f = SCHEMA[sheet].find(function(x){return x.n===c;});
+      const v = row[c];
+      if(!f) return v===undefined||v===null?'':v;
+      if(f.t==='ref') return refLabel(f.r, v);
+      if(f.t==='price') return (v===''||v===undefined||v===null||isNaN(Number(v))) ? '' : Number(v);
+      if(f.t==='date') return v ? formatDate(v) : '';
+      if(f.t==='datetime') return v ? formatDateTime(v) : '';
+      if(f.t==='image') return v ? 'Ada' : '-';
+      if(f.t==='file') return v ? 'Ada' : '-';
+      if(f.t==='password') return v ? '••••••••' : '-';
+      return v===undefined||v===null?'':v;
+    });
+  });
+  return { headers: headers, rows: body };
+}
+function printTable(){
+  const sheet = currentSheet;
+  if(!sheet) return;
+  const meta = TABLE_META[sheet];
+  const data = buildExportRows(sheet);
+  let html = '<h2 style="font-family:sans-serif;margin-bottom:4px;">'+esc(meta.label)+' &middot; PT Murinda Sentra Baja</h2>';
+  html += '<div style="font-family:sans-serif;font-size:12px;color:#555;margin-bottom:14px;">Dicetak: '+esc(fullDateTimeStr())+' &middot; '+data.rows.length+' data</div>';
+  html += '<table style="border-collapse:collapse;width:100%;font-family:sans-serif;font-size:12px;"><thead><tr>';
+  data.headers.forEach(function(h){ html += '<th style="border:1px solid #ccc;padding:6px 8px;text-align:left;background:#f2f2f2;">'+esc(h)+'</th>'; });
+  html += '</tr></thead><tbody>';
+  data.rows.forEach(function(r){
+    html += '<tr>';
+    r.forEach(function(v){ html += '<td style="border:1px solid #ccc;padding:6px 8px;">'+esc(v===''||v===undefined||v===null?'-':v)+'</td>'; });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  const win = window.open('', '_blank');
+  if(!win){ toast('Popup diblokir browser. Izinkan popup untuk mencetak.', 'error'); return; }
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+esc(meta.label)+'</title></head><body>'+html+'</body></html>');
+  win.document.close();
+  win.focus();
+  setTimeout(function(){ win.print(); }, 350);
+}
+function exportExcel(){
+  const sheet = currentSheet;
+  if(!sheet) return;
+  if(typeof XLSX === 'undefined'){ toast('Pustaka Excel gagal dimuat. Periksa koneksi internet.', 'error'); return; }
+  const meta = TABLE_META[sheet];
+  const data = buildExportRows(sheet);
+  const ws = XLSX.utils.aoa_to_sheet([data.headers].concat(data.rows));
+  const wb = XLSX.utils.book_new();
+  const tabName = meta.label.replace(/[\[\]\*\/\\\?:]/g,'').slice(0,31) || 'Data';
+  XLSX.utils.book_append_sheet(wb, ws, tabName);
+  XLSX.writeFile(wb, meta.label.replace(/[^a-zA-Z0-9]+/g,'_') + '_' + todayStr() + '.xlsx');
+  toast('Data berhasil diexport ke Excel');
+}
+
+function renderTableView(sheet){
+  const meta = TABLE_META[sheet];
+  const mod = moduleOf(meta.mod);
+  const editable = canEdit(sheet);
+  document.getElementById('crumbEyebrow').textContent = mod.label;
+  document.getElementById('crumbTitle').innerHTML = esc(meta.label) + (editable ? '' : ' <span class="view-only-badge"><i class="fa-solid fa-eye"></i> Mode Lihat Saja</span>');
+  document.getElementById('searchBox').style.display = 'flex';
+  document.getElementById('addBtn').style.display = editable ? 'inline-flex' : 'none';
+  document.getElementById('addBtnLabel').textContent = 'Tambah ' + meta.label;
+
+  const rows = getVisibleRows(sheet);
+  const total = rows.length;
+  const totalPages = Math.max(1, Math.ceil(total / viewState.pageSize));
+  if(viewState.page > totalPages) viewState.page = totalPages;
+  const startIdx = (viewState.page-1) * viewState.pageSize;
+  const pageRows = rows.slice(startIdx, startIdx + viewState.pageSize);
+  const filterFields = getFilterableFields(sheet);
+  const cols = visibleColsFor(sheet);
+  const primaryCol = cols.find(function(c){
+    const f = SCHEMA[sheet].find(function(x){return x.n===c;});
+    return !f || (f.t!=='image' && f.t!=='file');
+  });
+
+  let html = '<div class="table-toolbar"><div><div class="table-desc">'+total+' data tercatat</div></div>';
+  html += '<div class="table-actions">';
+  if(filterFields.length){
+    html += '<button class="btn-tool tool-filter'+(viewState.filterOpen?' active':'')+'" id="filterToggleBtn" onclick="toggleFilterPanel()"><i class="fa-solid fa-filter"></i> Filter</button>';
+  }
+  html += '<button class="btn-tool tool-print" onclick="printTable()"><i class="fa-solid fa-print"></i> Print</button>';
+  html += '<button class="btn-tool tool-export" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>';
+  html += '</div></div>';
+
+  if(filterFields.length) html += renderFilterBarHtml(sheet);
+
+  html += '<div class="data-card">';
+
+  if(total===0){
+    html += '<div class="empty-state"><i class="fa-solid fa-inbox"></i><div class="es-title">Belum ada data</div><div>Klik tombol "Tambah '+esc(meta.label)+'" untuk mulai mengisi.</div></div>';
+  }else{
+    html += '<div class="table-scroll"><table class="data-table"><thead><tr>';
+    cols.forEach(function(c){
+      const f = SCHEMA[sheet].find(function(x){return x.n===c;});
+      html += '<th>'+esc(f?f.l:c)+'</th>';
+    });
+    if(editable) html += '<th class="no-print" style="text-align:right;">Aksi</th>';
+    html += '</tr></thead><tbody>';
+    pageRows.forEach(function(row){
+      html += '<tr>';
+      cols.forEach(function(c){
+        const f = SCHEMA[sheet].find(function(x){return x.n===c;});
+        const cls = c===primaryCol ? 'cell-strong' : '';
+        html += '<td class="'+cls+'">'+cellHtml(sheet, f, row[c], row)+'</td>';
+      });
+      const keyVal = row[meta.key];
+      if(editable){
+        html += '<td class="no-print"><div class="row-actions">';
+        html += '<button class="mini-btn" title="Edit" data-action="edit-row" data-sheet="'+esc(sheet)+'" data-key="'+esc(keyVal)+'"><i class="fa-solid fa-pen"></i></button>';
+        html += '<button class="mini-btn danger" title="Hapus" data-action="delete-row" data-sheet="'+esc(sheet)+'" data-key="'+esc(keyVal)+'"><i class="fa-solid fa-trash"></i></button>';
+        html += '</div></td>';
+      }
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    html += '<div class="table-foot no-print"><div>Menampilkan '+(startIdx+1)+'–'+Math.min(startIdx+viewState.pageSize,total)+' dari '+total+' data</div>';
+    html += '<div class="pager-btns">';
+    html += '<button class="mini-btn" onclick="changePage(-1)" '+(viewState.page<=1?'disabled':'')+'><i class="fa-solid fa-chevron-left"></i></button>';
+    html += '<button class="mini-btn" onclick="changePage(1)" '+(viewState.page>=totalPages?'disabled':'')+'><i class="fa-solid fa-chevron-right"></i></button>';
+    html += '</div></div>';
+  }
+  html += '</div>';
+  document.getElementById('content').innerHTML = html;
+}
+function changePage(delta){ viewState.page += delta; renderTableView(currentSheet); }
+function onSearchInput(){ viewState.search = document.getElementById('searchInput').value; viewState.page = 1; renderTableView(currentSheet); }
+
+/* =====================================================================
+   FORM TAMBAH / EDIT
+   ===================================================================== */
+function openForm(sheet, keyVal){
+  if(!canEdit(sheet)){ toast('Anda tidak memiliki akses edit untuk menu ini', 'error'); return; }
+  currentSheet = sheet;
+  editingKey = keyVal;
+  currentUploads = {};
+  const meta = TABLE_META[sheet];
+  const mod = moduleOf(meta.mod);
+  const record = keyVal ? refRecord(sheet, keyVal) : null;
+
+  document.getElementById('formIcon').style.setProperty('--c1', mod.c1);
+  document.getElementById('formIcon').style.setProperty('--c2', mod.c2);
+  document.getElementById('formIcon').innerHTML = '<i class="fa-solid '+meta.icon+'"></i>';
+  document.getElementById('formTitle').textContent = (keyVal?'Edit ':'Tambah ') + meta.label;
+  document.getElementById('formSub').textContent = keyVal ? 'Kunci: '+keyVal : 'Data baru akan ditambahkan ke sheet '+sheet;
+
+  const grid = document.getElementById('formGrid');
+  let html = '';
+  SCHEMA[sheet].forEach(function(f){
+    if(f.ro && !f.calc && !keyVal) return; // ID otomatis: sembunyikan saat tambah baru
+    const val = record ? record[f.n] : '';
+    html += buildFieldHtml(sheet, f, val, !!keyVal);
+  });
+  grid.innerHTML = html;
+
+  // isi default utk field tanggal/waktu saat tambah baru
+  if(!keyVal){
+    SCHEMA[sheet].forEach(function(f){
+      if(f.d==='today'){ const el=document.querySelector('[data-field="'+f.n+'"]'); if(el) el.value = todayStr(); }
+      if(f.d==='now'){ const el=document.querySelector('[data-field="'+f.n+'"]'); if(el) el.value = nowStr(); }
+    });
+    // auto-prefill identitas jika user yang login cocok dengan salah satu Master_Karyawan
+    if(LOGGED_IN){
+      const idKaryawan = findKaryawanIdByName(LOGGED_IN.Nama_Lengkap);
+      if(idKaryawan){
+        ['Pemohon','Dibuat_Oleh'].forEach(function(fn){
+          const el=document.querySelector('[data-field="'+fn+'"]');
+          if(el && el.tagName==='SELECT') el.value = idKaryawan;
         });
-    </script>
+      }
+    }
+  }
+
+  bindCalcListeners(sheet);
+  document.getElementById('formOverlay').classList.add('show');
+}
+
+function buildFieldHtml(sheet, f, val, isEdit){
+  val = val===undefined||val===null ? '' : val;
+  const req = f.rq ? '<span class="req"> *</span>' : '';
+  const span = (f.t==='longtext' || f.t==='image' || f.t==='file') ? ' span2' : '';
+  let inner = '';
+
+  if(f.ro){
+    inner = '<input type="text" data-field="'+f.n+'" value="'+esc(val)+'" disabled placeholder="Dibuat otomatis oleh sistem">';
+  } else if(f.t==='enum'){
+    let opts = '<option value="">— pilih —</option>';
+    (f.o||[]).forEach(function(o){ opts += '<option value="'+esc(o)+'" '+(String(val)===o?'selected':'')+'>'+esc(o)+'</option>'; });
+    inner = '<select data-field="'+f.n+'">'+opts+'</select>';
+  } else if(f.t==='ref'){
+    inner = '<select data-field="'+f.n+'">'+refOptionsHtml(f.r, val)+'</select>';
+  } else if(f.t==='longtext'){
+    inner = '<textarea data-field="'+f.n+'">'+esc(val)+'</textarea>';
+  } else if(f.t==='date'){
+    inner = '<input type="date" data-field="'+f.n+'" value="'+esc(val)+'">';
+  } else if(f.t==='datetime'){
+    inner = '<input type="datetime-local" data-field="'+f.n+'" value="'+esc(val)+'">';
+  } else if(f.t==='time'){
+    inner = '<input type="time" data-field="'+f.n+'" value="'+esc(val)+'">';
+  } else if(f.t==='number' || f.t==='price'){
+    inner = '<input type="number" data-field="'+f.n+'" value="'+esc(val)+'" step="any">';
+  } else if(f.t==='password'){
+    inner = '<input type="password" data-field="'+f.n+'" value="'+esc(val)+'" autocomplete="new-password">';
+  } else if(f.t==='image' || f.t==='file'){
+    const isImg = f.t==='image';
+    const previewSrc = isImg ? resolveImageUrl(sheet, val) : '';
+    const previewInner = (previewSrc && isImg) ? '<img src="'+esc(previewSrc)+'">' : '<i class="fa-solid '+(isImg?'fa-image':'fa-file')+'"></i>';
+    inner = '<div class="upload-box" id="up-'+f.n.replace(/[^a-zA-Z0-9]/g,'_')+'">'
+      + '<div class="up-prev">'+previewInner+'</div>'
+      + '<div class="up-info">'+(val ? (isImg?'Gambar tersimpan':'File tersimpan') : 'Belum ada file')+'</div>'
+      + '<label class="upload-btn">Pilih File<input type="file" accept="'+(isImg?'image/*':'*')+'" onchange="handleFileUpload(this, \''+sheet+'\', \''+f.n+'\')"></label>'
+      + '<input type="hidden" data-field="'+f.n+'" value="'+esc(val)+'">'
+      + '</div>';
+  } else {
+    inner = '<input type="text" data-field="'+f.n+'" value="'+esc(val)+'">';
+  }
+
+  return '<div class="f-field'+span+'"><label>'+esc(f.l)+req+'</label>'+inner+'</div>';
+}
+
+function bindCalcListeners(sheet){
+  const triggers = SCHEMA[sheet].filter(function(f){return f.calcTrigger;});
+  if(!triggers.length) return;
+  const calcField = SCHEMA[sheet].find(function(f){return f.calc==='mul';});
+  if(!calcField) return;
+  function recompute(){
+    let product = 1, any=false;
+    triggers.forEach(function(f){
+      const el = document.querySelector('[data-field="'+f.n+'"]');
+      const v = el ? Number(el.value||0) : 0;
+      product *= v; any = true;
+    });
+    const out = document.querySelector('[data-field="'+calcField.n+'"]');
+    if(out) out.value = any ? product : '';
+  }
+  triggers.forEach(function(f){
+    const el = document.querySelector('[data-field="'+f.n+'"]');
+    if(el) el.addEventListener('input', recompute);
+  });
+  recompute();
+}
+
+async function handleFileUpload(inputEl, sheet, fieldName){
+  const file = inputEl.files[0];
+  if(!file) return;
+  const boxId = 'up-'+fieldName.replace(/[^a-zA-Z0-9]/g,'_');
+  const box = document.getElementById(boxId);
+  const infoEl = box.querySelector('.up-info');
+  infoEl.textContent = 'Mengunggah...';
+  try{
+    const base64 = await new Promise(function(resolve, reject){
+      const reader = new FileReader();
+      reader.onload = function(){ resolve(reader.result.split(',')[1]); };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    const res = await apiPost({ action:'upload', filename:file.name, mimeType:file.type, base64:base64, sheet:sheet });
+    if(!res.success) throw new Error(res.error||'Upload gagal');
+    const url = res.data.thumbnailUrl || res.data.directUrl || res.data.viewUrl;
+    box.querySelector('[data-field]').value = res.data.viewUrl;
+    const prev = box.querySelector('.up-prev');
+    const isImg = file.type.indexOf('image')>-1;
+    prev.innerHTML = isImg ? '<img src="'+esc(url)+'">' : '<i class="fa-solid fa-file"></i>';
+    infoEl.textContent = file.name;
+    toast('File berhasil diunggah');
+  }catch(err){
+    infoEl.textContent = 'Gagal mengunggah';
+    toast('Upload gagal: '+err.message, 'error');
+  }
+}
+
+async function submitForm(){
+  const sheet = currentSheet;
+  if(!canEdit(sheet)){ toast('Anda tidak memiliki akses edit untuk menu ini', 'error'); return; }
+  const meta = TABLE_META[sheet];
+  const data = {};
+  let missing = null;
+
+  SCHEMA[sheet].forEach(function(f){
+    const el = document.querySelector('[data-field="'+f.n+'"]');
+    let v = el ? el.value : '';
+    if(f.rq && !v) missing = f.l;
+    data[f.n] = v;
+  });
+
+  if(missing){ toast('"'+missing+'" wajib diisi', 'error'); return; }
+
+  const btn = document.getElementById('formSubmitBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+
+  try{
+    let res;
+    if(editingKey){
+      res = await apiPost({ action:'update', sheet:sheet, key:editingKey, data:data });
+    } else {
+      res = await apiPost({ action:'create', sheet:sheet, data:data });
+    }
+    if(!res.success) throw new Error(res.error||'Gagal menyimpan');
+    toast(editingKey ? 'Data berhasil diperbarui' : 'Data berhasil ditambahkan');
+    closeModal('formOverlay');
+    await loadAll();
+    renderTableView(sheet);
+    renderSidebar();
+  }catch(err){
+    toast('Gagal menyimpan: '+err.message, 'error');
+  }finally{
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check"></i> Simpan';
+  }
+}
+
+/* =====================================================================
+   HAPUS
+   ===================================================================== */
+function confirmDelete(sheet, keyVal){
+  if(!canEdit(sheet)){ toast('Anda tidak memiliki akses edit untuk menu ini', 'error'); return; }
+  const meta = TABLE_META[sheet];
+  document.getElementById('deleteMsg').textContent = 'Data "'+keyVal+'" pada '+meta.label+' akan dihapus permanen dari spreadsheet.';
+  const btn = document.getElementById('deleteConfirmBtn');
+  btn.onclick = async function(){
+    btn.disabled = true; btn.textContent = 'Menghapus...';
+    try{
+      const res = await apiPost({ action:'delete', sheet:sheet, key:keyVal });
+      if(!res.success) throw new Error(res.error||'Gagal menghapus');
+      toast('Data berhasil dihapus');
+      closeModal('deleteOverlay');
+      await loadAll();
+      renderTableView(sheet);
+      renderSidebar();
+    }catch(err){
+      toast('Gagal menghapus: '+err.message, 'error');
+    }finally{
+      btn.disabled = false; btn.textContent = 'Ya, Hapus';
+    }
+  };
+  document.getElementById('deleteOverlay').classList.add('show');
+}
+
+/* =====================================================================
+   MODAL HELPERS
+   ===================================================================== */
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.addEventListener('click', function(e){
+  if(e.target.classList && e.target.classList.contains('overlay')) e.target.classList.remove('show');
+});
+
+/* =====================================================================
+   TOMBOL AKSI TABEL (Edit / Hapus) — via data-attribute, bukan onclick
+   string yang di-interpolasi langsung (rawan bentrok tanda kutip saat
+   nilai key mengandung karakter tertentu, dan menyebabkan tombol tidak
+   bereaksi sama sekali saat diklik).
+   ===================================================================== */
+document.addEventListener('click', function(e){
+  const btn = e.target.closest ? e.target.closest('[data-action]') : null;
+  if(!btn) return;
+  const action = btn.getAttribute('data-action');
+  const sheet = btn.getAttribute('data-sheet');
+  const key = btn.getAttribute('data-key');
+  if(action==='edit-row') openForm(sheet, key);
+  else if(action==='delete-row') confirmDelete(sheet, key);
+});
+
+/* =====================================================================
+   LOGIN — USERNAME/PASSWORD DARI SHEET "Login" + MODE TAMU (HANYA LIHAT)
+   ===================================================================== */
+const LOGIN_STORAGE_KEY = 'ga_erp_login_session';
+
+function setLoggedIn(userObj){
+  LOGGED_IN = userObj;
+  updateIdentityCard();
+  try{
+    if(userObj) localStorage.setItem(LOGIN_STORAGE_KEY, JSON.stringify(userObj));
+    else localStorage.removeItem(LOGIN_STORAGE_KEY);
+  }catch(e){ /* localStorage tidak tersedia di browser ini, abaikan */ }
+}
+
+function restoreSession(){
+  let saved = null;
+  try{
+    const raw = localStorage.getItem(LOGIN_STORAGE_KEY);
+    if(raw) saved = JSON.parse(raw);
+  }catch(e){ /* abaikan */ }
+  if(!saved || !saved.Username) return;
+  // [FIX] Sebelumnya di sini dicoba mencocokkan ulang ke DATA.Login, yang
+  // sekarang SELALU kosong (sheet Login sengaja disembunyikan dari aksi
+  // 'all' — lihat Code.gs), sehingga sesi yang tersimpan tidak pernah
+  // berhasil dipulihkan dan user dipaksa login ulang setiap buka halaman.
+  // Username/password sesi ini sudah divalidasi server saat login
+  // dilakukan, jadi cukup dipulihkan langsung dari penyimpanan lokal.
+  LOGGED_IN = { Username: saved.Username, Nama_Lengkap: saved.Nama_Lengkap || saved.Username, Role: saved.Role || 'User' };
+}
+
+function openLoginModal(){
+  switchLoginTab('login','modal');
+  const err = document.getElementById('loginError');
+  err.classList.remove('show');
+  document.getElementById('loginUsername').value='';
+  document.getElementById('loginPassword').value='';
+  document.getElementById('loginOverlay').classList.add('show');
+}
+function switchLoginTab(tab, source){
+  const isGate = source==='gate';
+  document.getElementById(isGate?'gateTabLogin':'tabLogin').classList.toggle('active', tab==='login');
+  document.getElementById(isGate?'gateTabGuest':'tabGuest').classList.toggle('active', tab==='guest');
+  document.getElementById(isGate?'gateLoginPane':'loginPane').style.display = tab==='login' ? '' : 'none';
+  document.getElementById(isGate?'gateGuestPane':'guestPane').style.display = tab==='guest' ? '' : 'none';
+}
+
+/* [FIX] Login SEBELUMNYA mencocokkan username/password ke DATA.Login di
+   browser — tapi DATA.Login SELALU kosong karena sheet Login sengaja
+   disembunyikan dari aksi 'all' (lihat Code.gs, supaya daftar password
+   tidak ikut terkirim ke siapa pun yang membuka URL Apps Script secara
+   langsung). Itu sebabnya login selalu gagal walau username/password
+   sudah benar. Sekarang validasi dilakukan di server lewat aksi doPost
+   'login', dan browser hanya menerima hasilnya (tanpa password). */
+async function attemptLogin(source){
+  const isGate = source==='gate';
+  const uEl = document.getElementById(isGate?'gateUsername':'loginUsername');
+  const pEl = document.getElementById(isGate?'gatePassword':'loginPassword');
+  const err = document.getElementById(isGate?'gateLoginError':'loginError');
+  const btn = document.getElementById(isGate?'gateLoginBtn':'loginSubmitBtn');
+  const u = (uEl.value||'').trim();
+  const p = pEl.value||'';
+  err.classList.remove('show');
+  if(!u || !p){ err.textContent='Username dan password wajib diisi.'; err.classList.add('show'); return; }
+  const originalHtml = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memeriksa...';
+  try{
+    const res = await apiPost({ action:'login', username:u, password:p });
+    if(!res.success) throw new Error(res.error || 'Username atau password salah.');
+    const rec = res.data || {};
+    setLoggedIn({ Username:rec.Username, Nama_Lengkap: rec.Nama || rec.Nama_Lengkap || rec.Username, Role: rec.Role || 'User' });
+    if(isGate) enterApp(); else closeModal('loginOverlay');
+    toast('Berhasil masuk sebagai '+LOGGED_IN.Nama_Lengkap);
+    renderSidebar();
+    if(currentSheet) renderTableView(currentSheet); else renderDashboard();
+  }catch(e){
+    err.textContent = e.message || 'Username atau password salah.';
+    err.classList.add('show');
+  }finally{
+    btn.disabled = false; btn.innerHTML = originalHtml;
+  }
+}
+function enterAsGuest(source){
+  setLoggedIn(null);
+  if(source==='gate') enterApp(); else closeModal('loginOverlay');
+  toast('Anda masuk sebagai Tamu (mode hanya lihat)');
+  renderSidebar();
+  if(currentSheet==='Login' || currentSheet==='Pengaturan_Akses_Menu') showDashboard();
+  else if(currentSheet) renderTableView(currentSheet); else renderDashboard();
+}
+/* [FIX] Menyembunyikan halaman login (gate) dan menampilkan aplikasi —
+   dipanggil setelah login berhasil, memilih mode tamu, atau saat sesi
+   tersimpan berhasil dipulihkan. */
+function enterApp(){
+  document.getElementById('loginGate').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  updateIdentityCard();
+}
+function doLogout(){
+  setLoggedIn(null);
+  toast('Anda telah keluar');
+  renderSidebar();
+  if(currentSheet==='Login' || currentSheet==='Pengaturan_Akses_Menu') showDashboard();
+  else if(currentSheet) renderTableView(currentSheet); else renderDashboard();
+}
+function updateIdentityCard(){
+  const logoutBtn = document.getElementById('logoutBtn');
+  if(!LOGGED_IN){
+    document.getElementById('idAvatar').textContent = '?';
+    document.getElementById('idName').textContent = 'Tamu (Lihat Saja)';
+    document.getElementById('idSub').textContent = 'Klik untuk login';
+    logoutBtn.classList.remove('show');
+    return;
+  }
+  document.getElementById('idAvatar').textContent = initials(LOGGED_IN.Nama_Lengkap);
+  document.getElementById('idName').innerHTML = esc(LOGGED_IN.Nama_Lengkap) + (LOGGED_IN.Role==='Admin' ? '<span class="role-badge">ADMIN</span>' : '');
+  document.getElementById('idSub').textContent = LOGGED_IN.Role==='Admin' ? 'Administrator sistem' : 'Login · bisa mengubah data';
+  logoutBtn.classList.add('show');
+}
+
+/* =====================================================================
+   PENGATURAN AKSES MENU — KHUSUS ADMIN (Aspuro Amarulloh Khoiri)
+   Menentukan menu mana yang "Bisa Diedit" / "Hanya Lihat" untuk user
+   yang login (Admin selalu bisa mengedit semua menu apa pun isinya).
+   ===================================================================== */
+let PENDING_ACCESS = {};
+function renderAccessSettingsPage(){
+  document.getElementById('crumbEyebrow').textContent = 'Administrasi Sistem';
+  document.getElementById('crumbTitle').textContent = 'Pengaturan Akses Menu';
+  document.getElementById('searchBox').style.display = 'none';
+  document.getElementById('addBtn').style.display = 'none';
+  PENDING_ACCESS = {};
+
+  let html = '<div class="panel" style="margin-bottom:18px;">'
+    + '<h3 style="margin:0 0 6px 0;">Atur Akses per Menu</h3>'
+    + '<p style="margin:0;color:var(--ink-soft);font-size:13px;">Tentukan menu mana yang boleh diedit dan mana yang hanya bisa dilihat oleh user yang login. Khusus Admin (Aspuro Amarulloh Khoiri) selalu bisa mengedit semua menu apa pun pengaturannya di sini.</p>'
+    + '</div>';
+
+  MODULES.forEach(function(mod){
+    if(mod.id==='K') return; // menu administrasi sistem tidak perlu diatur di sini
+    const tables = Object.keys(TABLE_META).filter(function(k){ return TABLE_META[k].mod===mod.id; });
+    if(!tables.length) return;
+    html += '<div class="access-mod-block"><div class="access-mod-title">'
+      + '<div class="mini-badge" style="--c1:'+mod.c1+';--c2:'+mod.c2+';"><i class="fa-solid '+mod.icon+'"></i></div>'
+      + '<span>'+esc(mod.label)+'</span></div><div class="data-card">';
+    tables.forEach(function(t){
+      const meta = TABLE_META[t];
+      const current = menuAccessSetting(t);
+      html += '<div class="access-row">'
+        + '<div class="access-row-label"><i class="fa-solid '+meta.icon+'"></i>'+esc(meta.label)+'</div>'
+        + '<div class="access-toggle">'
+        + '<button class="access-btn a-edit'+(current==='Bisa Diedit'?' active':'')+'" onclick="setAccessChoice(\''+t+'\',\'Bisa Diedit\',this)">Bisa Diedit</button>'
+        + '<button class="access-btn a-view'+(current==='Hanya Lihat'?' active':'')+'" onclick="setAccessChoice(\''+t+'\',\'Hanya Lihat\',this)">Hanya Lihat</button>'
+        + '</div></div>';
+    });
+    html += '</div></div>';
+  });
+
+  html += '<button class="btn btn-primary" id="saveAccessBtn" onclick="saveAccessSettings()" style="margin-top:6px;"><i class="fa-solid fa-check"></i> Simpan Pengaturan</button>';
+  document.getElementById('content').innerHTML = html;
+}
+function setAccessChoice(sheet, value, btnEl){
+  PENDING_ACCESS[sheet] = value;
+  const wrap = btnEl.closest('.access-toggle');
+  wrap.querySelectorAll('.access-btn').forEach(function(b){ b.classList.remove('active'); });
+  btnEl.classList.add('active');
+}
+async function saveAccessSettings(){
+  const keys = Object.keys(PENDING_ACCESS);
+  if(!keys.length){ toast('Tidak ada perubahan untuk disimpan'); return; }
+  const btn = document.getElementById('saveAccessBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+  try{
+    await Promise.all(keys.map(function(sheet){
+      const value = PENDING_ACCESS[sheet];
+      const existing = (DATA.Pengaturan_Akses_Menu||[]).find(function(r){ return r.Sheet===sheet; });
+      if(existing) return apiPost({ action:'update', sheet:'Pengaturan_Akses_Menu', key:sheet, data:{ Sheet:sheet, Akses:value } });
+      return apiPost({ action:'create', sheet:'Pengaturan_Akses_Menu', data:{ Sheet:sheet, Akses:value } });
+    }));
+    toast('Pengaturan akses berhasil disimpan');
+    await loadAll();
+    renderAccessSettingsPage();
+    renderSidebar();
+  }catch(err){
+    toast('Gagal menyimpan pengaturan: '+err.message, 'error');
+  }finally{
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check"></i> Simpan Pengaturan';
+  }
+}
+
+/* =====================================================================
+   EFEK VISUAL — RIPPLE SAAT KLIK & SPOTLIGHT SAAT HOVER
+   ===================================================================== */
+const RIPPLE_SELECTOR = '.btn,.icon-btn,.mini-btn,.nav-dash,.nav-item,.nav-group-head,.kpi-card,.identity-card,.identity-logout,.access-btn,.login-tab,.modal-close,.upload-btn';
+document.addEventListener('click', function(ev){
+  const el = ev.target.closest ? ev.target.closest(RIPPLE_SELECTOR) : null;
+  if(!el || el.disabled) return;
+  el.classList.add('fx-ripple-host');
+  const rect = el.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 1.4;
+  const span = document.createElement('span');
+  span.className = 'fx-ripple-span' + (el.classList.contains('btn-primary') ? ' fx-light' : (el.classList.contains('danger') ? ' fx-danger' : ''));
+  span.style.width = span.style.height = size + 'px';
+  span.style.left = (ev.clientX - rect.left - size/2) + 'px';
+  span.style.top = (ev.clientY - rect.top - size/2) + 'px';
+  el.appendChild(span);
+  setTimeout(function(){ span.remove(); }, 560);
+});
+document.addEventListener('mousemove', function(ev){
+  const card = ev.target.closest ? ev.target.closest('.kpi-card') : null;
+  if(!card) return;
+  const rect = card.getBoundingClientRect();
+  card.style.setProperty('--mx', (ev.clientX-rect.left)+'px');
+  card.style.setProperty('--my', (ev.clientY-rect.top)+'px');
+});
+
+/* =====================================================================
+   INIT
+   ===================================================================== */
+async function init(){
+  updateClock();
+  setInterval(updateClock, 1000);
+  // [FIX] Halaman #app kini disembunyikan (style="display:none;") sampai
+  // user login atau memilih mode tamu di halaman login (gate) — sebelumnya
+  // dashboard sempat dirender di belakang modal login yang transparan.
+  await loadAll();
+  document.getElementById('gateLoading').style.display = 'none';
+  document.getElementById('gateFormWrap').style.display = '';
+  restoreSession();
+  if(LOGGED_IN){
+    enterApp();
+    renderSidebar();
+    renderDashboard();
+  }
+  // Kalau belum ada sesi tersimpan, halaman login (gate) tetap tampil
+  // menunggu user login atau memilih "Hanya Lihat" — lihat attemptLogin()
+  // dan enterAsGuest() yang memanggil enterApp() setelah itu.
+}
+init();
+</script>
 </body>
 </html>
