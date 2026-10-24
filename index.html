@@ -444,7 +444,7 @@ table.data-table tbody tr:hover{background:var(--surface-soft);}
         <div class="form-grid" style="grid-template-columns:1fr;">
           <div class="f-field">
             <label>Username</label>
-            <input type="text" id="gateUsername" placeholder="Masukkan username" autocomplete="username">
+            <select id="gateUsername" autocomplete="username"><option value="">Memuat daftar user...</option></select>
           </div>
           <div class="f-field">
             <label>Password</label>
@@ -566,7 +566,7 @@ table.data-table tbody tr:hover{background:var(--surface-soft);}
         <div class="form-grid" style="grid-template-columns:1fr;">
           <div class="f-field">
             <label>Username</label>
-            <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username">
+            <select id="loginUsername" autocomplete="username"><option value="">Memuat daftar user...</option></select>
           </div>
           <div class="f-field">
             <label>Password</label>
@@ -2060,13 +2060,39 @@ document.addEventListener('mousemove', function(ev){
 /* =====================================================================
    INIT
    ===================================================================== */
+/* =====================================================================
+   DROPDOWN USERNAME LOGIN
+   Daftar user diambil dari server (hanya username, tanpa password).
+   Kalau gagal dimuat, kolom username otomatis kembali jadi kotak ketik.
+   ===================================================================== */
+async function loadLoginUsers(){
+  const ids = ['gateUsername','loginUsername'];
+  try{
+    const res = await apiGet('loginUsers');
+    if(!res.success || !Array.isArray(res.data) || !res.data.length) throw new Error('daftar user kosong');
+    const opts = '<option value="">— Pilih user —</option>' + res.data.map(function(u){
+      return '<option value="'+esc(u)+'">'+esc(u)+'</option>';
+    }).join('');
+    ids.forEach(function(id){ const el = document.getElementById(id); if(el) el.innerHTML = opts; });
+  }catch(e){
+    ids.forEach(function(id){
+      const el = document.getElementById(id);
+      if(!el || el.tagName!=='SELECT') return;
+      const inp = document.createElement('input');
+      inp.type = 'text'; inp.id = id; inp.placeholder = 'Masukkan username';
+      inp.setAttribute('autocomplete','username');
+      el.parentNode.replaceChild(inp, el);
+    });
+  }
+}
+
 async function init(){
   updateClock();
   setInterval(updateClock, 1000);
   // [FIX] Halaman #app kini disembunyikan (style="display:none;") sampai
   // user login atau memilih mode tamu di halaman login (gate) — sebelumnya
   // dashboard sempat dirender di belakang modal login yang transparan.
-  await loadAll();
+  await Promise.all([loadAll(), loadLoginUsers()]);
   document.getElementById('gateLoading').style.display = 'none';
   document.getElementById('gateFormWrap').style.display = '';
   restoreSession();
