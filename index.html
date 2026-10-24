@@ -695,7 +695,7 @@ Data_Kendaraan:[
   {n:'Masa_Berlaku_STNK',l:'Masa Berlaku STNK',t:'date'},
   {n:'Masa_Berlaku_Pajak',l:'Masa Berlaku Pajak',t:'date'},
   {n:'Driver_Default',l:'Driver Default',t:'ref',r:'Master_Karyawan'},
-  {n:'Status_Kendaraan',l:'Status Kendaraan',t:'enum',o:['Tersedia','Dipakai','Servis','Rusak']},
+  {n:'Status_Kendaraan',l:'Status Kendaraan',t:'enum',o:['Tersedia','Dipakai','Perlu Pengecekan','Servis','Rusak']},
 ],
 Penggunaan_Kendaraan:[
   {n:'No_Penggunaan',l:'No. Penggunaan',t:'text',ro:1},
@@ -708,6 +708,23 @@ Penggunaan_Kendaraan:[
   {n:'KM_Awal',l:'KM Awal',t:'number'},
   {n:'KM_Akhir',l:'KM Akhir',t:'number'},
   {n:'Status',l:'Status',t:'enum',o:['Diajukan','Disetujui','Berjalan','Selesai','Ditolak']},
+  {n:'Waktu_Pengajuan',l:'Waktu Pengajuan',t:'datetime'},
+  {n:'Nama_Peminjam',l:'Nama Peminjam',t:'text'},
+  {n:'Departemen',l:'Departemen',t:'text'},
+  {n:'No_HP',l:'No. HP',t:'text'},
+  {n:'Atasan',l:'Atasan / Penyetuju',t:'text'},
+  {n:'Pengemudi',l:'Pengemudi',t:'enum',o:['Mengemudi sendiri','Dengan sopir GA']},
+  {n:'Keperluan',l:'Keperluan',t:'text'},
+  {n:'Rencana_Kembali',l:'Rencana Kembali',t:'datetime'},
+  {n:'Jumlah_Penumpang',l:'Jumlah Penumpang',t:'number'},
+  {n:'Nama_Penumpang',l:'Nama Penumpang',t:'longtext'},
+  {n:'BBM_Awal',l:'BBM Awal',t:'enum',o:['Penuh','3/4','1/2','1/4','Hampir habis']},
+  {n:'Kondisi_Awal',l:'Kondisi Awal',t:'longtext'},
+  {n:'Catatan_Awal',l:'Catatan Awal',t:'longtext'},
+  {n:'BBM_Akhir',l:'BBM Akhir',t:'enum',o:['Penuh','3/4','1/2','1/4','Hampir habis']},
+  {n:'Kondisi_Akhir',l:'Kondisi Akhir',t:'longtext'},
+  {n:'Catatan_Akhir',l:'Catatan Akhir',t:'longtext'},
+  {n:'Jarak_KM',l:'Jarak Tempuh (km)',t:'number'},
 ],
 Service_Kendaraan:[
   {n:'No_Service',l:'No. Service',t:'text',ro:1},
@@ -928,7 +945,7 @@ const TABLE_META = {
   Perawatan_Aset:{label:'Perawatan Aset',icon:'fa-screwdriver-wrench',key:'No_Perawatan',lf:'No_Perawatan',mod:'B',cols:['No_Perawatan','Kode_Aset','Tanggal_Perawatan','Jenis_Perawatan','Vendor','Status']},
 
   Data_Kendaraan:{label:'Data Kendaraan',icon:'fa-car',key:'No_Polisi',lf:'Merk_Model',mod:'C',cols:['No_Polisi','Jenis_Kendaraan','Merk_Model','Masa_Berlaku_Pajak','Status_Kendaraan']},
-  Penggunaan_Kendaraan:{label:'Pemakaian Kendaraan',icon:'fa-road',key:'No_Penggunaan',lf:'No_Penggunaan',mod:'C',cols:['No_Penggunaan','No_Polisi','Peminjam','Tanggal_Berangkat','Status']},
+  Penggunaan_Kendaraan:{label:'Pemakaian Kendaraan',icon:'fa-road',key:'No_Penggunaan',lf:'No_Penggunaan',mod:'C',cols:['No_Penggunaan','No_Polisi','Peminjam','Departemen','Tujuan','Tanggal_Berangkat','Rencana_Kembali','Tanggal_Kembali','Jarak_KM','Status']},
   Service_Kendaraan:{label:'Servis Kendaraan',icon:'fa-oil-can',key:'No_Service',lf:'No_Service',mod:'C',cols:['No_Service','No_Polisi','Tanggal_Service','Jenis_Service','Biaya']},
 
   Master_Barang_ATK:{label:'Master Barang ATK',icon:'fa-pen',key:'Kode_Barang',lf:'Nama_Barang',mod:'D',cols:['Kode_Barang','Nama_Barang','Kategori','Satuan','Stok_Minimum']},
@@ -1061,7 +1078,7 @@ function statusClass(v){
   const s=String(v||'').toLowerCase();
   const green=['baik','aktif','disetujui','selesai','lunas','tersedia','berlaku','diserahkan','sudah keluar'];
   const red=['rusak','ditolak','terlambat','kadaluarsa','nonaktif','batal','dibatalkan','afkir','urgent','tinggi','hilang'];
-  const amber=['menunggu','proses','diproses','diajukan','dijadwalkan','akan kadaluarsa','dipinjam','dipakai','berjalan','sedang','di dalam','belum dibayar','baru','servis'];
+  const amber=['menunggu','proses','diproses','diajukan','dijadwalkan','akan kadaluarsa','dipinjam','dipakai','berjalan','sedang','di dalam','belum dibayar','baru','servis','perlu'];
   for(let i=0;i<green.length;i++){ if(s.indexOf(green[i])>-1) return 'p-green'; }
   for(let i=0;i<red.length;i++){ if(s.indexOf(red[i])>-1) return 'p-red'; }
   for(let i=0;i<amber.length;i++){ if(s.indexOf(amber[i])>-1) return 'p-amber'; }
@@ -1195,6 +1212,44 @@ function within(dateStr, days){
   return diff >= -0.01 && diff <= days;
 }
 
+function usageRunning(g){ return g('Penggunaan_Kendaraan').filter(function(r){ return r.Status==='Berjalan'; }); }
+function usageDue(r){ return r.Rencana_Kembali || r.Tanggal_Kembali || ''; }
+function usageLate(r){ const t=usageDue(r); return !!t && new Date(t) < new Date(); }
+function kendaraanMonitorHtml(g){
+  const run = usageRunning(g);
+  let a = '<div class="panel-grid"><div class="panel"><h3>Kendaraan Sedang Dipakai</h3>';
+  if(!run.length){ a += '<div class="empty-note">Tidak ada kendaraan yang sedang dipakai.</div>'; }
+  else{
+    a += '<div class="table-scroll"><table class="data-table" style="min-width:520px;"><thead><tr><th>Kendaraan</th><th>Peminjam</th><th>Tujuan</th><th>Rencana Kembali</th><th>Status</th></tr></thead><tbody>';
+    run.forEach(function(r){
+      const late = usageLate(r);
+      a += '<tr><td class="cell-strong">'+esc(r.No_Polisi)+'</td><td>'+esc(r.Nama_Peminjam || refLabel('Master_Karyawan', r.Peminjam))+'</td><td>'+esc(r.Tujuan||'-')+'</td><td>'+esc(formatDateTime(usageDue(r)))+'</td><td><span class="pill '+(late?'p-red':'p-green')+'"><span class="dot"></span>'+(late?'Terlambat':'Sesuai jadwal')+'</span></td></tr>';
+    });
+    a += '</tbody></table></div>';
+  }
+  a += '</div>';
+  const now = new Date(), ym = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const rec = {};
+  g('Penggunaan_Kendaraan').forEach(function(r){
+    if(String(r.Tanggal_Berangkat||'').slice(0,7)!==ym || !r.No_Polisi) return;
+    if(r.Status!=='Disetujui' && r.Status!=='Berjalan' && r.Status!=='Selesai') return;
+    const p = r.No_Polisi;
+    rec[p] = rec[p] || {n:0, km:0};
+    rec[p].n++;
+    const j = Number(r.Jarak_KM) || ((Number(r.KM_Akhir)>0) ? Number(r.KM_Akhir)-Number(r.KM_Awal||0) : 0);
+    rec[p].km += j>0 ? j : 0;
+  });
+  a += '<div class="panel"><h3>Rekap Pemakaian Bulan Ini</h3>';
+  const keys = Object.keys(rec);
+  if(!keys.length){ a += '<div class="empty-note">Belum ada pemakaian bulan ini.</div>'; }
+  else{
+    keys.forEach(function(p){
+      a += '<div class="alert-row"><span class="a-title">'+esc(p)+' <span class="cell-muted">'+esc(refLabel('Data_Kendaraan',p)===p?'':refLabel('Data_Kendaraan',p))+'</span></span><span class="a-meta">'+rec[p].n+'x &middot; '+rec[p].km.toLocaleString('id-ID')+' km</span></div>';
+    });
+  }
+  return a + '</div></div>';
+}
+
 function renderDashboard(){
   document.getElementById('crumbEyebrow').textContent = 'Beranda';
   document.getElementById('crumbTitle').textContent = 'Dashboard';
@@ -1209,6 +1264,8 @@ function renderDashboard(){
     asetDipinjam: g('Data_Aset_Inventaris').filter(function(r){return r.Status_Aset==='Dipinjam';}).length,
     kendaraanTersedia: g('Data_Kendaraan').filter(function(r){return r.Status_Kendaraan==='Tersedia';}).length,
     kendaraanTotal: g('Data_Kendaraan').length,
+    kendaraanJalan: usageRunning(g).length,
+    kendaraanTelat: usageRunning(g).filter(usageLate).length,
     pajakSegera: g('Data_Kendaraan').filter(function(r){return within(r.Masa_Berlaku_Pajak,30);}).length,
     prPending: g('Permintaan_Pembelian_GA').filter(function(r){return r.Status_Approval==='Menunggu';}).length,
     poDiproses: g('Purchase_Order_GA').filter(function(r){return r.Status_PO==='Diproses';}).length,
@@ -1228,6 +1285,8 @@ function renderDashboard(){
     {label:'Total Karyawan', num:cnt.karyawan, icon:'fa-users', c1:'#4F46E5',c2:'#818CF8', go:'Master_Karyawan'},
     {label:'Aset Sedang Dipinjam', num:cnt.asetDipinjam+' / '+cnt.asetTotal, icon:'fa-boxes-stacked', c1:'#D97706',c2:'#FBBF24', go:'Data_Aset_Inventaris'},
     {label:'Kendaraan Tersedia', num:cnt.kendaraanTersedia+' / '+cnt.kendaraanTotal, icon:'fa-car', c1:'#0284C7',c2:'#38BDF8', go:'Data_Kendaraan'},
+    {label:'Kendaraan Sedang Dipakai', num:cnt.kendaraanJalan, icon:'fa-road', c1:'#0284C7',c2:'#38BDF8', go:'Penggunaan_Kendaraan'},
+    {label:'Kendaraan Terlambat Kembali', num:cnt.kendaraanTelat, icon:'fa-clock', c1:'#E11D48',c2:'#FB7185', go:'Penggunaan_Kendaraan'},
     {label:'Pajak Kendaraan ≤30 Hari', num:cnt.pajakSegera, icon:'fa-triangle-exclamation', c1:'#EA580C',c2:'#FB923C', go:'Data_Kendaraan'},
     {label:'PR Menunggu Approval', num:cnt.prPending, icon:'fa-file-invoice', c1:'#059669',c2:'#34D399', go:'Permintaan_Pembelian_GA'},
     {label:'PO Sedang Diproses', num:cnt.poDiproses, icon:'fa-file-contract', c1:'#059669',c2:'#34D399', go:'Purchase_Order_GA'},
@@ -1253,10 +1312,17 @@ function renderDashboard(){
   html += '<div class="panel"><h3>Perlu Perhatian</h3><div id="alertList"></div></div>';
   html += '<div class="panel"><h3>Status Tiket Helpdesk GA</h3><canvas id="chartTiket" height="190"></canvas></div>';
   html += '</div>';
+  html += kendaraanMonitorHtml(g);
 
   document.getElementById('content').innerHTML = html;
 
   const alerts = [];
+  usageRunning(g).filter(usageLate).forEach(function(r){
+    alerts.push({dot:'#E11D48', title:'Kendaraan '+r.No_Polisi+' belum kembali (lewat jadwal)', meta:formatDateTime(usageDue(r))});
+  });
+  g('Data_Kendaraan').filter(function(r){return r.Status_Kendaraan==='Perlu Pengecekan';}).forEach(function(r){
+    alerts.push({dot:'#D97706', title:'Kendaraan '+r.No_Polisi+' perlu dicek GA', meta:'Setelah pemakaian'});
+  });
   g('Data_Kendaraan').filter(function(r){return within(r.Masa_Berlaku_Pajak,30);}).forEach(function(r){
     alerts.push({dot:'#EA580C', title:'Pajak '+r.No_Polisi+' akan jatuh tempo', meta:formatDate(r.Masa_Berlaku_Pajak)});
   });
