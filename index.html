@@ -712,7 +712,12 @@ Penggunaan_Kendaraan:[
   {n:'Nama_Peminjam',l:'Nama Peminjam',t:'text'},
   {n:'Departemen',l:'Departemen',t:'text'},
   {n:'No_HP',l:'No. HP',t:'text'},
-  {n:'Atasan',l:'Atasan / Penyetuju',t:'text'},
+  /* Kolom O-S = hasil IMPORTRANGE dari sistem approval (read-only). Urutan HARUS sama dengan SCHEMA di Code.gs GA-ERP. */
+  {n:'Disetujui Oleh (Status)',l:'Status Approval',t:'text',ro:1,ph:'Diisi otomatis dari sistem approval'},
+  {n:'Disetujui Oleh (Nama)',l:'Disetujui Oleh',t:'text',ro:1,ph:'Diisi otomatis dari sistem approval'},
+  {n:'Disetujui Oleh (Tanggal)',l:'Tanggal Approval',t:'datetime',ro:1,ph:'Diisi otomatis dari sistem approval'},
+  {n:'Disetujui Oleh (TTD)',l:'Link TTD Digital',t:'text',ro:1,ph:'Diisi otomatis dari sistem approval'},
+  {n:'Link Validasi',l:'Link Validasi Dokumen (isi QR)',t:'text',ro:1,ph:'Diisi otomatis dari sistem approval'},
   {n:'Pengemudi',l:'Pengemudi',t:'enum',o:['Mengemudi sendiri','Dengan sopir GA']},
   {n:'Keperluan',l:'Keperluan',t:'text'},
   {n:'Rencana_Kembali',l:'Rencana Kembali',t:'datetime'},
@@ -1665,7 +1670,7 @@ function buildFieldHtml(sheet, f, val, isEdit){
   let inner = '';
 
   if(f.ro){
-    inner = '<input type="text" data-field="'+f.n+'" value="'+esc(val)+'" disabled placeholder="Dibuat otomatis oleh sistem">';
+    inner = '<input type="text" data-field="'+f.n+'" value="'+esc(val)+'" disabled placeholder="'+esc(f.ph||'Dibuat otomatis oleh sistem')+'">';
   } else if(f.t==='enum'){
     let opts = '<option value="">— pilih —</option>';
     (f.o||[]).forEach(function(o){ opts += '<option value="'+esc(o)+'" '+(String(val)===o?'selected':'')+'>'+esc(o)+'</option>'; });
